@@ -4,7 +4,7 @@
         private $error = array();
     
         private $event_function_map = [
-            'admin/view/extension/extension/before' => 'purchase',
+            'catalog/model/checkout/order/addOrderHistory/after' => 'purchase',
         ];
 
         public function install() {
@@ -158,21 +158,6 @@
             }
     
             return !$this->error;
-        }
-
-        public function store($route, $data) {
-            $this->db->query("INSERT INTO `" . DB_PREFIX . "logstore_xapi_log`
-                (
-                    `event_route`,
-                    `user_id`,
-                    `data`
-                )
-                VALUES (
-                    '" . $this->db->escape($route) . "',
-                    '" . $this->db->escape($this->customer->getId()) . "',
-                    '" . $this->db->escape(json_encode($data)) . "'
-                )
-            ");
         }
 
     }
