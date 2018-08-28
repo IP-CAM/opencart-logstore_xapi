@@ -1,5 +1,5 @@
 <?php
-// admin/language/en-gb/module/logstore_xapi.php
+// admin/language/en-gb/extension/module/logstore_xapi.php
 // Heading
 $_['heading_title']    = 'Logstore xAPI';
  

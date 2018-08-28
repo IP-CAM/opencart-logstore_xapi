@@ -1,4 +1,4 @@
-<!-- admin/view/template/module/logstore_xapi.tpl -->
+<!-- admin/view/template/extension/module/logstore_xapi.tpl -->
 <?php echo $header; ?><?php echo $column_left; ?>
 <div id="content">
   <div class="page-header">

@@ -1,22 +1,22 @@
 <?php
-// admin/controller/module/logstore_xapi.php
-class ControllerModuleLogstoreXapi extends Controller {
+// admin/controller/extension/module/logstore_xapi.php
+class ControllerExtensionModuleLogstoreXapi extends Controller {
     private $error = array();
  
     public function index() {
         $this->load->language('extension/module/html');
-        $this->load->language('module/logstore_xapi');
+        $this->load->language('extension/module/logstore_xapi');
  
         $this->document->setTitle($this->language->get('heading_title'));
  
-        $this->load->model('extension/module');
+        $this->load->model('setting/setting');
  
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->model_setting_setting->editSetting('logstore_xapi', $this->request->post);
-     
+                 
             $this->session->data['success'] = $this->language->get('text_success');
      
-            $this->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+            $this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL'));
         }
  
         $data['heading_title'] = $this->language->get('heading_title');
@@ -58,22 +58,22 @@ class ControllerModuleLogstoreXapi extends Controller {
  
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_extension'),
-            'href' => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
+            'href' => $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL')
         );
  
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('heading_title'),
-            'href' => $this->url->link('module/recent_products', 'token=' . $this->session->data['token'], 'SSL')
+            'href' => $this->url->link('extension/module/logstore_xapi', 'token=' . $this->session->data['token'], 'SSL')
         );
  
-        $data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+        $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL');
  
         if (isset($this->request->post['endpoint'])) {
             $data['endpoint'] = $this->request->post['endpoint'];
         } elseif(isset($this->config->get['endpoint'])) {
             $data['endpoint'] = $this->config->get['endpoint'];
         } else {
-            $data['endpoint'] = '';
+            $data['endpoint'] = 'test';
         }
  
         if (isset($this->request->post['username'])) {
@@ -104,11 +104,11 @@ class ControllerModuleLogstoreXapi extends Controller {
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
  
-        $this->response->setOutput($this->load->view('module/logstore_xapi.tpl', $data));
+        $this->response->setOutput($this->load->view('extension/module/logstore_xapi.tpl', $data));
     }
  
     protected function validate() {
-        if (!$this->user->hasPermission('modify', 'module/logstore_xapi')) {
+        if (!$this->user->hasPermission('modify', 'extension/module/logstore_xapi')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
  
