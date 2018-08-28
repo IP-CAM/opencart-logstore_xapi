@@ -67,37 +67,37 @@ class ControllerExtensionModuleLogstoreXapi extends Controller {
         );
  
         $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL');
- 
-        if (isset($this->request->post['endpoint'])) {
-            $data['endpoint'] = $this->request->post['endpoint'];
-        } elseif(isset($this->config->get['endpoint'])) {
-            $data['endpoint'] = $this->config->get['endpoint'];
+
+        if (isset($this->request->post['logstore_xapi_endpoint'])) {
+            $data['logstore_xapi_endpoint'] = $this->request->post['logstore_xapi_endpoint'];
+        } elseif($this->config->get('logstore_xapi_endpoint')) {
+            $data['logstore_xapi_endpoint'] = $this->config->get('logstore_xapi_endpoint');
         } else {
-            $data['endpoint'] = 'test';
+            $data['logstore_xapi_endpoint'] = '';
         }
  
-        if (isset($this->request->post['username'])) {
-            $data['username'] = $this->request->post['username'];
-        } elseif(isset($this->config->get['username'])) {
-            $data['username'] = $this->config->get['username'];
+        if (isset($this->request->post['logstore_xapi_username'])) {
+            $data['logstore_xapi_username'] = $this->request->post['logstore_xapi_username'];
+        } elseif($this->config->get('logstore_xapi_username')) {
+            $data['logstore_xapi_username'] = $this->config->get('logstore_xapi_username');
         } else {
-            $data['username'] = '';
+            $data['logstore_xapi_username'] = '';
         }
  
-        if (isset($this->request->post['password'])) {
-            $data['password'] = $this->request->post['password'];
-        } elseif(isset($this->config->get['password'])) {
-            $data['password'] = $this->config->get['password'];
+        if (isset($this->request->post['logstore_xapi_password'])) {
+            $data['logstore_xapi_password'] = $this->request->post['logstore_xapi_password'];
+        } elseif($this->config->get('logstore_xapi_password')) {
+            $data['logstore_xapi_password'] = $this->config->get('logstore_xapi_password');
         } else {
-            $data['password'] = '';
+            $data['logstore_xapi_password'] = '';
         }
  
-        if (isset($this->request->post['max_batch_size'])) {
-            $data['max_batch_size'] = $this->request->post['max_batch_size'];
-        } elseif(isset($this->config->get['max_batch_size'])) {
-            $data['max_batch_size'] = $this->config->get['max_batch_size'];
+        if (isset($this->request->post['logstore_xapi_max_batch_size'])) {
+            $data['logstore_xapi_max_batch_size'] = $this->request->post['logstore_xapi_max_batch_size'];
+        } elseif($this->config->get('logstore_xapi_max_batch_size')) {
+            $data['logstore_xapi_max_batch_size'] = $this->config->get('logstore_xapi_max_batch_size');
         } else {
-            $data['max_batch_size'] = '';
+            $data['logstore_xapi_max_batch_size'] = '';
         }
  
         $data['header'] = $this->load->controller('common/header');
@@ -112,11 +112,11 @@ class ControllerExtensionModuleLogstoreXapi extends Controller {
             $this->error['warning'] = $this->language->get('error_permission');
         }
  
-        if ($this->request->post['endpoint'] !== '' && !filter_var($this->request->post['endpoint'], FILTER_VALIDATE_URL)) {
+        if ($this->request->post['logstore_xapi_endpoint'] !== '' && !filter_var($this->request->post['logstore_xapi_endpoint'], FILTER_VALIDATE_URL)) {
             $this->error['endpoint'] = $this->language->get('error_endpoint');
         }
  
-        if ($this->request->post['max_batch_size'] !== '' && !is_numeric($this->request->post['max_batch_size'])) {
+        if ($this->request->post['logstore_xapi_max_batch_size'] !== '' && !is_numeric($this->request->post['logstore_xapi_max_batch_size'])) {
             $this->error['max_batch_size'] = $this->language->get('error_max_batch_size');
         }
  

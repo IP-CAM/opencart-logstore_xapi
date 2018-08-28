@@ -29,7 +29,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-endpoint"><?php echo $entry_endpoint; ?></label>
             <div class="col-sm-10">
-              <input type="text" name="endpoint" value="<?php echo $endpoint; ?>" placeholder="<?php echo $entry_endpoint; ?>" id="input-endpoint" class="form-control" />
+              <input type="text" name="logstore_xapi_endpoint" value="<?php echo $logstore_xapi_endpoint; ?>" placeholder="<?php echo $entry_endpoint; ?>" id="input-endpoint" class="form-control" />
               <?php if ($error_endpoint) { ?>
               <div class="text-danger"><?php echo $error_endpoint; ?></div>
               <?php } ?>
@@ -38,19 +38,19 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-limit"><?php echo $entry_username; ?></label>
             <div class="col-sm-10">
-              <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
+              <input type="text" name="logstore_xapi_username" value="<?php echo $logstore_xapi_username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-limit"><?php echo $entry_password; ?></label>
             <div class="col-sm-10">
-              <input type="text" name="password" value="<?php echo $password; ?>" placeholder="<?php echo $entry_password; ?>" id="input-password" class="form-control" />
+              <input type="text" name="logstore_xapi_password" value="<?php echo $logstore_xapi_password; ?>" placeholder="<?php echo $entry_password; ?>" id="input-password" class="form-control" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-limit"><?php echo $entry_max_batch_size; ?></label>
             <div class="col-sm-10">
-              <input type="text" name="max_batch_size" value="<?php echo $max_batch_size; ?>" placeholder="<?php echo $entry_max_batch_size; ?>" id="input-max_batch_size" class="form-control" />
+              <input type="text" name="logstore_xapi_max_batch_size" value="<?php echo $logstore_xapi_max_batch_size; ?>" placeholder="<?php echo $entry_max_batch_size; ?>" id="input-max_batch_size" class="form-control" />
               <?php if ($error_max_batch_size) { ?>
               <div class="text-danger"><?php echo $error_max_batch_size; ?></div>
               <?php } ?>
