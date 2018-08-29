@@ -2,13 +2,14 @@
     // admin/controller/extension/module/logstore_xapi.php
     class ControllerExtensionModuleLogstoreXapi extends Controller {
         private $error = array();
-    
-        private $event_function_map = [
-            'catalog/model/checkout/order/addOrderHistory/after' => 'purchase',
-        ];
 
+        private function get_event_function_map_keys() {
+            require('../catalog/controller/extension/module/logstore_xapi/get_event_function_map.php');
+            return array_keys($get_event_function_map);
+        }
+    
         public function install() {
-            $eventfunctionmapkeys = array_keys($this->event_function_map);
+            $eventfunctionmapkeys = $this->get_event_function_map_keys();
 
             // set up the database
             $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "logstore_xapi_log` (
@@ -28,7 +29,7 @@
         }
 
         public function uninstall() {
-            $eventfunctionmapkeys = array_keys($this->event_function_map);
+            $eventfunctionmapkeys = $this->get_event_function_map_keys();
 
             // remove the database table
             $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "logstore_xapi_log`");
