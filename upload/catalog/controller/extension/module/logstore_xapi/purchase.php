@@ -70,7 +70,7 @@
           "contextActivities" => [
             "grouping" => [
               [
-                "id" => "https://biblemesh.com",
+                "id" => "https://courses.biblemesh.com",
                 "definition" => [
                   "type" => "http://activitystrea.ms/schema/1.0/service",
                   "name" => [

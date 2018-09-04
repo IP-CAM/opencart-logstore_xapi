@@ -10,13 +10,13 @@
     if(!$product_moodle_mapping_row) return;
 
     return [
-      "id" => "https://learn.biblemesh.com/course/view.php?id=" . $product_moodle_mapping_row['moodle_course_id'],
+      "id" => mb_ereg_replace('MOODLE_ID', $product_moodle_mapping_row['moodle_course_id'], $general['moodle_url_template']),
       "definition" => [
         "type" => "http://id.tincanapi.com/activitytype/lms/course",
         "name" => [
           "en" => $order_product_row['name'],
         ],
-        "moreInfo" => "https://sandbox.biblemesh.com/index.php?route=product/product&product_id=" . $order_product_row['product_id'],
+        "moreInfo" => $general['site_base'] . "index.php?route=product/product&product_id=" . $order_product_row['product_id'],
       ],
     ];
   }
