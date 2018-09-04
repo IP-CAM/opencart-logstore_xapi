@@ -112,7 +112,7 @@
             $this->db->query("INSERT INTO `" . DB_PREFIX . "logstore_xapi_log`
                 (
                     `event_route`,
-                    `user_id`,
+                    `customer_id`,
                     `data`
                 )
                 VALUES (

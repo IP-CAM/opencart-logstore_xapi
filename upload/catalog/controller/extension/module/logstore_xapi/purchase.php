@@ -1,5 +1,5 @@
 <?php
-  require_once('utils/get_user.php');
+  require_once('utils/get_customer.php');
 
   function purchase($log, $general) {
 
@@ -15,7 +15,7 @@
 
     // get the info needed from the DB
     $order_row = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id='" . $general['db']->escape($order_id) . "'")->row;
-    $actor = get_user($log['user_id'], $general);
+    $actor = get_customer($log['customer_id'], $general);
 
     // see if we have all the info we need
     if(!$order_row) {
@@ -24,7 +24,7 @@
       return;
     }
     if(!$actor) {
-      echo "    Cannot find user who made the purchase:\n";
+      echo "    Cannot find customer who made the purchase:\n";
       print_r($log);
       return;
     }

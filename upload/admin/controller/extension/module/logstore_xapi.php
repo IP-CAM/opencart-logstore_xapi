@@ -16,7 +16,7 @@
                 `logstore_xapi_log_id` int(11) NOT NULL AUTO_INCREMENT,
                 `event_route` varchar(255) NOT NULL,
                 `data` longtext NOT NULL,
-                `user_id` int(11) NOT NULL,
+                `customer_id` int(11) NOT NULL,
                 `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (`logstore_xapi_log_id`)
             )");
