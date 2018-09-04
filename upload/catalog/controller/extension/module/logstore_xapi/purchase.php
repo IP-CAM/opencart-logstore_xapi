@@ -15,12 +15,18 @@
     }
 
     // get the info needed from the DB
+    $order_row = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id='" . $general['db']->escape($order_id) . "'")->row;
     $order_product_rows = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order_product` WHERE order_id='" . $general['db']->escape($order_id) . "'")->rows;
     $actor = get_customer($log['customer_id'], $general);
 
     // see if we have all the info we need
-    if(count($order_product_rows) <= 0) {
+    if(!$order_row) {
       echo "    Cannot find order row for purchase:\n";
+      print_r($log);
+      return;
+    }
+    if(count($order_product_rows) <= 0) {
+      echo "    Cannot find order products for purchase:\n";
       print_r($log);
       return;
     }
@@ -55,26 +61,26 @@
           ],
         ],
         "object" => $object,
-        "timestamp" => "2014-11-11T15:53:20+00:00",
+        "timestamp" => date('c', strtotime($order_row['date_added'])),
         "context" => [
           "platform" => "OpenCart",
           "language" => "en",
           "extensions" => [
             "http://lrs.learninglocker.net/define/extensions/info" => [
-              "https://opencart.com" => "2.3.0.2",
-              "event_name" => "checkout\\order\\addOrderHistory",
+              "https://opencart.com" => VERSION,
+              "event_name" => $log['event_route'],
               "event_function" => "purchase",
-              "order_id" => 123,
+              "order_id" => $order_id,
             ],
           ],
           "contextActivities" => [
             "grouping" => [
               [
-                "id" => "https://courses.biblemesh.com",
+                "id" => mb_ereg_replace('/$', '', $general['site_base']),
                 "definition" => [
                   "type" => "http://activitystrea.ms/schema/1.0/service",
                   "name" => [
-                    "en" => "BibleMesh",
+                    "en" => $general['config_name'],
                   ],
                 ],
                 "objectType" => "Activity"
@@ -98,40 +104,6 @@
     }
 
     return $statements;
-
-
-
-    // $repo = $config['repo'];
-    // $user = $repo->read_record_by_id('user', $event->relateduserid);
-    // $course = $repo->read_record_by_id('course', $event->courseid);
-    // $lang = utils\get_course_lang($course);  ??
-
-    // return[[
-    //     'actor' => utils\get_user($log['user_id']),
-    //     'verb' => [
-    //         'id' => '??',
-    //         'display' => [
-    //             $lang => 'purchased'
-    //         ],
-    //     ],
-    //     'object' => utils\get_course(??),
-    //     'timestamp' => date('c', $event['date_added']),
-    //     'context' => [
-    //         'platform' => $config['source_name'],
-    //         'language' => $lang,
-    //         'extensions' => [
-    //             $general['info_extension'] => utils\get_info($event, $general),
-    //         ],
-    //         'contextActivities' => [
-    //             'grouping' => [
-    //                 utils\get_activity\site($config)
-    //             ],
-    //             'category' => [
-    //                 utils\get_activity\source($config)
-    //             ]
-    //         ],
-    //     ]
-    // ]];
 
   }
 ?>

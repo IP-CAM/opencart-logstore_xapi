@@ -22,13 +22,14 @@
 
           date_default_timezone_set('Europe/London');
           $eventfunctionmap = $this->get_event_function_map_altered();
-          
+
           $general = [
             'source_name' => 'OpenCart',
             'info_extension' => 'http://lrs.learninglocker.net/define/extensions/info',
             'db' => $this->db,
             'moodle_url_template' => "https://learn.biblemesh.com/course/view.php?id=MOODLE_ID",
             'site_base' => $this->config->get('site_base'),
+            'config_name' => $this->config->get('config_name'),
           ];
       
           // get the extension configuration
