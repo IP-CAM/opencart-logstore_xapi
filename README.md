@@ -9,3 +9,8 @@
   - create transformer for the purchase event
 - Add in all other needed info
 - Do other events
+
+## Usage
+
+1) Install `php-cgi` (`sudo apt-get install php5-cgi`)
+2) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
