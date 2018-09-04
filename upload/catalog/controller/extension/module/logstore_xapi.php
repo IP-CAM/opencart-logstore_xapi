@@ -26,6 +26,7 @@
           $general = [
             'source_name' => 'OpenCart',
             'info_extension' => 'http://lrs.learninglocker.net/define/extensions/info',
+            'db' => $this->db,
           ];
       
           // get the extension configuration
@@ -55,8 +56,11 @@
             if (isset($eventfunctionmap[$log['event_route']])) {
               require_once('catalog/controller/extension/module/logstore_xapi/' . $eventfunctionmap[$log['event_route']] . '.php');
               $eventfunction = $eventfunctionmap[$log['event_route']];
-              $statements = array_merge($statements, $eventfunction($log, $general));
-              $ids_to_delete[] = $log['logstore_xapi_log_id'];
+              $result = $eventfunction($log, $general);
+              if($result) {
+                  $statements = array_merge($statements, $result);
+                  $ids_to_delete[] = $log['logstore_xapi_log_id'];
+              }
             }
           }
 

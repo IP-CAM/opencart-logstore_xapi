@@ -1,5 +1,27 @@
 <?php
   function purchase($log, $general) {
+
+    // get the order id
+    $data = json_decode($log['data']);
+    $order_id = $data[0];
+
+    if(!$order_id) {
+      echo "    Invalid purchase log:\n";
+      print_r($log);
+      return;
+    }
+
+    // get the info needed from the DB
+    $order_row = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id='" . $general['db']->escape($order_id) . "'")->row;
+
+    if(!$order_row) {
+      echo "    Cannot find order row for purchase:\n";
+      print_r($log);
+      return;
+    }
+
+    print_r($order_row);
+
     return [[
       'test' => 'good'
     ]];
