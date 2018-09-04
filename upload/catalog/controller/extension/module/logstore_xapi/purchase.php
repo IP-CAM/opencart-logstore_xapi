@@ -36,14 +36,9 @@
       return;
     }
 
-    print_r($log);
-    print_r($order_product_rows);
-
     $statements = array();
 
     foreach($order_product_rows as $order_product_row) {
-      print_r($order_product_row);
-
       $object = get_course($order_product_row, $general);
 
       if(!$object) {

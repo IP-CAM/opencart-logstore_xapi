@@ -73,7 +73,7 @@
           }
       
           echo "  Sending " . count($statements) . " statements...\n";
-          print_r($statements);
+          // print_r($statements);
           return;
       
           // send them to the store
