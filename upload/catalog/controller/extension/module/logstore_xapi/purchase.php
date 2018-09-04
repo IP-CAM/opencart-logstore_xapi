@@ -23,8 +23,67 @@
     print_r($order_row);
 
     return [[
-      'test' => 'good'
+      "actor" => [
+        "name" => "Admin User",
+        "mbox" => "mailto:customer.support@biblemesh.com",
+      ],
+      "verb" => [
+        "id" => "http://activitystrea.ms/schema/1.0/purchase",
+        "display" => [
+          "en" => "purchased",
+        ],
+      ],
+      "object" => [
+        "id" => "https://sandbox.biblemesh.com/course-catalog/christianity-explored-course",
+        "definition" => [
+          "type" => "http://id.tincanapi.com/activitytype/lms/course",
+          "name" => [
+            "en" => "Christianity Explored",
+          ],
+        ],
+      ],
+      "timestamp" => "2014-11-11T15:53:20+00:00",
+      "context" => [
+        "platform" => "OpenCart",
+        "language" => "en",
+        "extensions" => [
+          "http://lrs.learninglocker.net/define/extensions/info" => [
+            "https://opencart.com" => "2.3.0.2",
+            "event_name" => "checkout\\order\\addOrderHistory",
+            "event_function" => "purchase",
+            "order_id" => 123,
+          ],
+        ],
+        "contextActivities" => [
+          "grouping" => [
+            [
+              "id" => "https://biblemesh.com",
+              "definition" => [
+                "type" => "http://activitystrea.ms/schema/1.0/service",
+                "name" => [
+                  "en" => "BibleMesh",
+                ],
+              ],
+              "objectType" => "Activity"
+            ],
+          ],
+          "category" => [
+            [
+              "id" => "https://opencart.com",
+              "definition" => [
+                "type" => "http://id.tincanapi.com/activitytype/source",
+                "name" => [
+                  "en" => "OpenCart",
+                ],
+              ],
+              "objectType" => "Activity",
+            ],
+          ],
+        ],
+      ],
     ]];
+
+
 
     // $repo = $config['repo'];
     // $user = $repo->read_record_by_id('user', $event->relateduserid);
