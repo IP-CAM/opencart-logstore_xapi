@@ -1,4 +1,6 @@
 <?php
+  require_once('utils/get_user.php');
+
   function purchase($log, $general) {
 
     // get the order id
@@ -13,20 +15,25 @@
 
     // get the info needed from the DB
     $order_row = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id='" . $general['db']->escape($order_id) . "'")->row;
+    $actor = get_user($log['user_id'], $general);
 
+    // see if we have all the info we need
     if(!$order_row) {
       echo "    Cannot find order row for purchase:\n";
       print_r($log);
       return;
     }
+    if(!$actor) {
+      echo "    Cannot find user who made the purchase:\n";
+      print_r($log);
+      return;
+    }
 
+    print_r($log);
     print_r($order_row);
 
     return [[
-      "actor" => [
-        "name" => "Admin User",
-        "mbox" => "mailto:customer.support@biblemesh.com",
-      ],
+      "actor" => $actor,
       "verb" => [
         "id" => "http://activitystrea.ms/schema/1.0/purchase",
         "display" => [
