@@ -2,6 +2,9 @@
   require_once('utils/get_customer.php');
   require_once('utils/get_course.php');
   require_once('utils/format_language.php');
+  require_once('utils/get_basic_context.php');
+  require_once('utils/get_platform.php');
+  require_once('utils/get_site.php');
 
   function purchase($log, $general) {
 
@@ -68,44 +71,19 @@
         ],
         "object" => $object,
         "timestamp" => date('c', strtotime($order_row['date_added'])),
-        "context" => [
-          "platform" => "OpenCart",
-          "language" => $general['config_language'],
-          "extensions" => [
-            "http://lrs.learninglocker.net/define/extensions/info" => [
-              "https://opencart.com" => VERSION,
-              "event_name" => $log['event_route'],
-              "event_function" => "purchase",
-              "order_id" => $order_id,
-            ],
-          ],
-          "contextActivities" => [
-            "grouping" => [
-              [
-                "id" => mb_ereg_replace('/$', '', $general['site_base']),
-                "definition" => [
-                  "type" => "http://activitystrea.ms/schema/1.0/service",
-                  "name" => [
-                    $general['config_language'] => $general['config_name'],
-                  ],
-                ],
-                "objectType" => "Activity"
+        "context" => array_merge(
+          get_basic_context($log, $order_id, $general),
+          [
+            "contextActivities" => [
+              "grouping" => [
+                get_site($general),
+              ],
+              "category" => [
+                get_platform($general),
               ],
             ],
-            "category" => [
-              [
-                "id" => "https://opencart.com",
-                "definition" => [
-                  "type" => "http://id.tincanapi.com/activitytype/source",
-                  "name" => [
-                    $general['config_language'] => "OpenCart",
-                  ],
-                ],
-                "objectType" => "Activity",
-              ],
-            ],
-          ],
-        ],
+          ]
+        ),
       ];
     }
 
