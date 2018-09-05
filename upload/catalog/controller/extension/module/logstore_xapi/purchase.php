@@ -52,7 +52,7 @@
         "verb" => [
           "id" => "http://activitystrea.ms/schema/1.0/purchase",
           "display" => [
-            "en" => "purchased",
+            $general['config_language'] => "purchased",
           ],
         ],
         "object" => $object,
@@ -75,7 +75,7 @@
                 "definition" => [
                   "type" => "http://activitystrea.ms/schema/1.0/service",
                   "name" => [
-                    "en" => $general['config_name'],
+                    $general['config_language'] => $general['config_name'],
                   ],
                 ],
                 "objectType" => "Activity"
@@ -87,7 +87,7 @@
                 "definition" => [
                   "type" => "http://id.tincanapi.com/activitytype/source",
                   "name" => [
-                    "en" => "OpenCart",
+                    $general['config_language'] => "OpenCart",
                   ],
                 ],
                 "objectType" => "Activity",

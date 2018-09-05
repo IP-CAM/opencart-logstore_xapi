@@ -14,7 +14,7 @@
       "definition" => [
         "type" => "http://id.tincanapi.com/activitytype/lms/course",
         "name" => [
-          "en" => $order_product_row['name'],
+          $general['config_language'] => $order_product_row['name'],
         ],
         "moreInfo" => $general['site_base'] . "index.php?route=product/product&product_id=" . $order_product_row['product_id'],
       ],
