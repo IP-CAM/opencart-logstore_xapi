@@ -1,6 +1,7 @@
 <?php
   require_once('utils/get_customer.php');
   require_once('utils/get_course.php');
+  require_once('utils/format_language.php');
 
   function purchase($log, $general) {
 
@@ -15,21 +16,31 @@
     }
 
     // get the info needed from the DB
-    $order_row = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id='" . $general['db']->escape($order_id) . "'")->row;
-    $order_product_rows = $general['db']->query("SELECT * FROM `" . DB_PREFIX . "order_product` WHERE order_id='" . $general['db']->escape($order_id) . "'")->rows;
-    $actor = get_customer($log['customer_id'], $general);
-
-    // see if we have all the info we need
+    $order_row = $general['db']->query(
+      "SELECT o.*, l.code as language_code " .
+      "FROM `" . DB_PREFIX . "order` as o " .
+      "LEFT JOIN `" . DB_PREFIX . "language` as l ON (o.language_id=l.language_id) " .
+      "WHERE o.order_id='" . $general['db']->escape($order_id) . "'"
+    )->row;
     if(!$order_row) {
       echo "    Cannot find order row for purchase:\n";
       print_r($log);
       return;
     }
+    $orig_config_language = $general['config_language'];
+    $general['config_language'] = format_language($order_row['language_code']);
+
+    $order_product_rows = $general['db']->query(
+      "SELECT * FROM `" . DB_PREFIX . "order_product` " .
+      "WHERE order_id='" . $general['db']->escape($order_id) . "'"
+    )->rows;
     if(count($order_product_rows) <= 0) {
       echo "    Cannot find order products for purchase:\n";
       print_r($log);
       return;
     }
+
+    $actor = get_customer($log['customer_id'], $general);
     if(!$actor) {
       echo "    Cannot find customer who made the purchase:\n";
       print_r($log);
@@ -97,6 +108,8 @@
         ],
       ];
     }
+
+    $general['config_language'] = $orig_config_language;
 
     return $statements;
 

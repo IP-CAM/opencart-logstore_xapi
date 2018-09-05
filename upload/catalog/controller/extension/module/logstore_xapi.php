@@ -1,4 +1,6 @@
 <?php
+    require_once('logstore_xapi/utils/format_language.php');
+
     // catalog/controller/extension/module/logstore_xapi.php
     class ControllerExtensionModuleLogstoreXapi extends Controller {
 
@@ -30,7 +32,7 @@
             'moodle_url_template' => "https://learn.biblemesh.com/course/view.php?id=MOODLE_ID",
             'site_base' => $this->config->get('site_base'),
             'config_name' => $this->config->get('config_name'),
-            'config_language' => $this->config->get('config_language'),
+            'config_language' => format_language($this->config->get('config_language')),
           ];
       
           // get the extension configuration
