@@ -1,5 +1,5 @@
 <?php
-  function get_course($order_product_row, $general) {
+  function get_course($order_row, $order_product_row, $general) {
 
     // get the moodle course id from the DB
     $product_moodle_mapping_row = $general['db']->query(
@@ -17,6 +17,25 @@
           $general['config_language'] => $order_product_row['name'],
         ],
         "moreInfo" => $general['site_base'] . "index.php?route=product/product&product_id=" . $order_product_row['product_id'],
+        "extensions" => [
+          "http://lrs.learninglocker.net/define/extensions/info" => array_merge(
+            [
+              "price" => $order_product_row['price'],
+            ],
+            [
+              "expirationDate" => get_expiration_date($order_row, $order_product_row, $general),
+            ],
+            ($isRecurring
+              ? [
+                "recurringInfo" => [
+                  "id" => 123,
+                  "period" => "??",
+                ]
+              ]
+              : array()
+            )
+          ),
+        ],
       ],
     ];
   }

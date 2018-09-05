@@ -53,7 +53,7 @@
     $statements = array();
 
     foreach($order_product_rows as $order_product_row) {
-      $object = get_course($order_product_row, $general);
+      $object = get_course($order_row, $order_product_row, $general);
 
       if(!$object) {
         echo "    Skipping, as this is not a course:\n";
@@ -75,12 +75,23 @@
           get_basic_context($log, $order_id, $general),
           [
             "contextActivities" => [
+              "parent" => [
+                get_partner($order_product_row, $general),
+              ],
               "grouping" => [
                 get_site($general),
+                get_category($order_product_row, $general),
               ],
               "category" => [
                 get_platform($general),
               ],
+              "other" => [
+                get_institution($order_row, $general),
+              ],
+            ],
+            "extensions" => [
+              get_affiliate($order_row, $general),
+              get_coupons($order_row, $order_product_row, $general),
             ],
           ]
         ),
