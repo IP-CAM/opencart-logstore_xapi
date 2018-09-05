@@ -30,6 +30,7 @@
             'moodle_url_template' => "https://learn.biblemesh.com/course/view.php?id=MOODLE_ID",
             'site_base' => $this->config->get('site_base'),
             'config_name' => $this->config->get('config_name'),
+            'config_language' => $this->config->get('config_language'),
           ];
       
           // get the extension configuration
@@ -74,7 +75,7 @@
       
           echo "  Sending " . count($statements) . " statement(s)...\n";
           // print_r($statements);
-      
+          
           // send them to the store
           $url = mb_ereg_replace('(/statements|/)$', '', $endpoint) . '/statements';
           $auth = base64_encode($username.':'.$password);

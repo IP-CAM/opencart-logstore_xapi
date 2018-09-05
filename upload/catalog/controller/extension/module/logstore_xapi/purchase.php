@@ -59,7 +59,7 @@
         "timestamp" => date('c', strtotime($order_row['date_added'])),
         "context" => [
           "platform" => "OpenCart",
-          "language" => "en",
+          "language" => $general['config_language'],
           "extensions" => [
             "http://lrs.learninglocker.net/define/extensions/info" => [
               "https://opencart.com" => VERSION,
