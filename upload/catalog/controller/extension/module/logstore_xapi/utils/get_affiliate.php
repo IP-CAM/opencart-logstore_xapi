@@ -15,13 +15,13 @@
       return [];
     }
 
-    return [[
+    return [
       "http://id.tincanapi.com/extension/training-provider" => [
       // or https://w3id.org/xapi/acrossx/extensions/school
       // or http://id.tincanapi.com/extension/referrer
         "affiliate_id" => $affiliate_id,
         "affiliate_name" => trim($affiliate_row['firstname'] . ' ' . $affiliate_row['lastname']),
       ],
-    ]];
+    ];
   }
 ?>

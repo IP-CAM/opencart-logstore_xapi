@@ -8,6 +8,7 @@
   require_once('utils/get_platform.php');
   require_once('utils/get_categories.php');
   require_once('utils/get_institution.php');
+  require_once('utils/get_basic_extensions.php');
   require_once('utils/get_affiliate.php');
   require_once('utils/get_coupons.php');
 
@@ -77,7 +78,7 @@
         "object" => $object,
         "timestamp" => date('c', strtotime($order_row['date_added'])),
         "context" => array_merge(
-          get_basic_context($log, $order_id, $general, "purchase"),
+          get_basic_context($general),
           [
             "contextActivities" => [
               "parent" => array_merge(
@@ -95,6 +96,10 @@
               ),
             ],
             "extensions" => array_merge(
+              get_basic_extensions($log, $general, "purchase"),
+              [
+                "http://lrs.resourcingeducation.com/extension/order-id" => $order_id,
+              ],
               get_affiliate($order_row['affiliate_id'], $general),
               get_coupons($order_row, $order_product_row, $general)
             ),

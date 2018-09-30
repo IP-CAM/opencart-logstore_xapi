@@ -17,14 +17,18 @@
 
     foreach($coupon_rows as $coupon_row) {
       $coupons[] = [
-        "http://lrs.resourcingeducation.com/extension/coupon" => [
-          "coupon_id" => $coupon_row['coupon_id'],
-          "coupon_code" => $coupon_row['code'],
-          "coupon_name" => $coupon_row['name'],
-        ]
+        "coupon_id" => $coupon_row['coupon_id'],
+        "coupon_code" => $coupon_row['code'],
+        "coupon_name" => $coupon_row['name'],
       ];
     }
 
-    return $coupons;
+    if(count($coupons) === 0) {
+      return [];
+    }
+    
+    return [
+      "http://lrs.resourcingeducation.com/extension/coupons" => $coupons,
+    ];
   }
 ?>
