@@ -1,4 +1,6 @@
 <?php
+  require_once('utils/get_expiration.php');
+
   function get_course($order_row, $order_product_row, $general) {
 
     // get the moodle course id from the DB
@@ -8,6 +10,8 @@
     )->row;
 
     if(!$product_moodle_mapping_row) return;
+
+    $isRecurring = false;
 
     return [
       "id" => mb_ereg_replace('MOODLE_ID', $product_moodle_mapping_row['moodle_course_id'], $general['moodle_url_template']),
@@ -22,9 +26,7 @@
             [
               "price" => $order_product_row['price'],
             ],
-            [
-              "expirationDate" => get_expiration_date($order_row, $order_product_row, $general),
-            ],
+            get_expiration($order_product_row, $general),
             ($isRecurring
               ? [
                 "recurringInfo" => [

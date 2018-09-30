@@ -33,6 +33,8 @@
             'site_base' => $this->config->get('site_base'),
             'config_name' => $this->config->get('config_name'),
             'config_language' => format_language($this->config->get('config_language')),
+            'plugin_url' => "https://lrs.resourcingeducation.com/plugins/opencart-logstore_xapi",
+            'plugin_version' => "1.0",
           ];
       
           // get the extension configuration
@@ -76,7 +78,8 @@
           }
       
           echo "  Sending " . count($statements) . " statement(s)...\n";
-          // print_r($statements);
+          print_r($statements);
+die();
           
           // send them to the store
           $url = mb_ereg_replace('(/statements|/)$', '', $endpoint) . '/statements';

@@ -6,9 +6,22 @@
 
     if(!$customer_row) return;
 
+    $fullname = trim($customer_row['firstname'] . ' ' . $customer_row['lastname']);
+    $hasvalidemail = filter_var($customer_row['email'], FILTER_VALIDATE_EMAIL);
+
+    if ($hasvalidemail) {
+      return [
+        "name" => $fullname,
+        "mbox" => "mailto:" . $customer_row['email'],
+      ];
+    }
+
     return [
-      "name" => trim($customer_row['firstname'] . ' ' . $customer_row['lastname']),
-      "mbox" => "mailto:" . $customer_row['email'],
+      'name' => $fullname,
+      'account' => [
+          'homePage' => $general['site_base'],
+          'name' => strval($customer_row['customer_id']),
+      ],
     ];
   }
 ?>

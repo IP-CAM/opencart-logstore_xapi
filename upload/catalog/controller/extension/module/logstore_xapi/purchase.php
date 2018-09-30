@@ -1,10 +1,15 @@
 <?php
+  require_once('utils/format_language.php');
   require_once('utils/get_customer.php');
   require_once('utils/get_course.php');
-  require_once('utils/format_language.php');
   require_once('utils/get_basic_context.php');
-  require_once('utils/get_platform.php');
+  require_once('utils/get_partner.php');
   require_once('utils/get_site.php');
+  require_once('utils/get_platform.php');
+  require_once('utils/get_categories.php');
+  require_once('utils/get_institution.php');
+  require_once('utils/get_affiliate.php');
+  require_once('utils/get_coupons.php');
 
   function purchase($log, $general) {
 
@@ -72,27 +77,27 @@
         "object" => $object,
         "timestamp" => date('c', strtotime($order_row['date_added'])),
         "context" => array_merge(
-          get_basic_context($log, $order_id, $general),
+          get_basic_context($log, $order_id, $general, "purchase"),
           [
             "contextActivities" => [
-              "parent" => [
-                get_partner($order_product_row, $general),
-              ],
-              "grouping" => [
-                get_site($general),
-                get_category($order_product_row, $general),
-              ],
-              "category" => [
+              "parent" => array_merge(
+                get_partner($order_product_row, $general)
+              ),
+              "grouping" => array_merge(
+                get_site($general)
+              ),
+              "category" => array_merge(
                 get_platform($general),
-              ],
-              "other" => [
-                get_institution($order_row, $general),
-              ],
+                get_categories($order_product_row, $general)
+              ),
+              "other" => array_merge(
+                get_institution($order_row, $general)
+              ),
             ],
-            "extensions" => [
-              get_affiliate($order_row, $general),
-              get_coupons($order_row, $order_product_row, $general),
-            ],
+            "extensions" => array_merge(
+              get_affiliate($order_row['affiliate_id'], $general),
+              get_coupons($order_row, $order_product_row, $general)
+            ),
           ]
         ),
       ];

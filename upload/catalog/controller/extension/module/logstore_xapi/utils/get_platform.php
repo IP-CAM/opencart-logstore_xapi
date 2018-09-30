@@ -1,7 +1,7 @@
 <?php
   function get_platform($general) {
 
-    return [
+    return [[
       "id" => "https://opencart.com",
       "definition" => [
         "type" => "http://id.tincanapi.com/activitytype/source",
@@ -10,6 +10,6 @@
         ],
       ],
       "objectType" => "Activity",
-    ];
+    ]];
   }
 ?>
