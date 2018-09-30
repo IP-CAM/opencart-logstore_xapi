@@ -67,7 +67,7 @@
         continue;
       }
 
-      $statements[] = [
+      $statements[] = $newstatement = [
         "actor" => $actor,
         "verb" => [
           "id" => "http://activitystrea.ms/schema/1.0/purchase",
@@ -106,6 +106,12 @@
           ]
         ),
       ];
+
+      foreach($newstatement['context']['contextActivities'] as $type => $contents) {
+        if(count($contents) === 0) {
+          unset($statements[count($statements)-1]['context']['contextActivities'][$type]);
+        }
+      }
     }
 
     $general['config_language'] = $orig_config_language;
