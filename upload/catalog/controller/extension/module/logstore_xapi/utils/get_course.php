@@ -1,4 +1,5 @@
 <?php
+  require_once('get_order_options.php');
   require_once('get_expiration.php');
 
   function get_course($order_row, $order_product_row, $general) {
@@ -23,6 +24,7 @@
         "moreInfo" => $general['site_base'] . "index.php?route=product/product&product_id=" . $order_product_row['product_id'],
         "extensions" => [
           "http://lrs.learninglocker.net/define/extensions/info" => array_merge(
+            get_order_options($order_row, $order_product_row, $general),
             [
               "price" => $order_product_row['price'],
             ],

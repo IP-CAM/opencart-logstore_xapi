@@ -10,7 +10,7 @@
   
     // option_id 13 (Registration Period), 14 (Registration Renewal Period)
 
-    // get the moodle course id from the DB
+    // get the expiration info from the DB
     $product_moodle_mapping_row = $general['db']->query(
       "SELECT povtmp.interval, povtmp.unit, pov.option_id FROM `" . DB_PREFIX . "product_option_value_to_moodle_period` as povtmp " .
       "LEFT JOIN `" . DB_PREFIX . "product_option_value` as pov " .
@@ -34,7 +34,7 @@
     }
 
     return [
-      "expirationDate" => date('c', $expiretime)
+      "expires" => date('c', $expiretime)
     ];
   }
 ?>
