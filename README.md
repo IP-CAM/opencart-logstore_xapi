@@ -2,9 +2,8 @@
 
 ## ToDos
 
-- get basic func working
 - Add in all other needed info
-- Do other events (added: Average number of months a student pays for the institute subscription before they cancel it [50% likelihood])
+- Do other events
 
 - for LRS
   - Reduce IP addresses that can connect to only the LRS and me
@@ -20,7 +19,6 @@ cd /var/www/html/opencart2.3/upload
 
 
 
-  // What if course name is different than in Moodle - do they still get associated?
   // non-course product purchases
   // check order status before sending this over - make sure the transaction was approved!!
   // other events
@@ -45,6 +43,8 @@ cd /var/www/html/opencart2.3/upload
     // institutions are problematic because they are entered manually and invoiced in a way that OpenCart knows nothing about.
   // How many people received or used a certain discount
     // coupon_history - order_id / coupon - name
+  // Average number of months a student pays for the institute subscription before they cancel it [50% likelihood]
+    // on cancel event, include how long they had it in the statement
 
 - order_product > product_to_category > id, category_description: name (academic discipline)
   - contextActivities grouping
