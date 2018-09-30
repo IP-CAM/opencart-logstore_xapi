@@ -5,8 +5,8 @@
 
     // get the partner (i.e. manufacturer) info from the DB
     $manufacturer_row = $general['db']->query(
-      "SELECT m.manufacturer_id, m.name, ua.keyword FROM `" . DB_PREFIX . "manufacturer` as m" .
-      "LEFT JOIN `" . DB_PREFIX . "product` as p ON (p.manufacturer_id=m.manufacturer AND " . $product_condition . ") " .
+      "SELECT m.manufacturer_id, m.name, ua.keyword FROM `" . DB_PREFIX . "manufacturer` as m " .
+      "LEFT JOIN `" . DB_PREFIX . "product` as p ON (p.manufacturer_id=m.manufacturer_id AND " . $product_condition . ") " .
       "LEFT JOIN `" . DB_PREFIX . "url_alias` as ua ON (ua.query=CONCAT('manufacturer_id=',m.manufacturer_id)) " .
       "WHERE " . $product_condition
     )->row;

@@ -7,7 +7,7 @@
       "extensions" => [
         "http://lrs.learninglocker.net/define/extensions/info" => [
           "https://opencart.com" => VERSION,
-          $config['plugin_url'] => $config['plugin_version'],
+          $general['plugin_url'] => $general['plugin_version'],
           "event_name" => $log['event_route'],
           "event_function" => $event_function,
           "order_id" => $order_id,

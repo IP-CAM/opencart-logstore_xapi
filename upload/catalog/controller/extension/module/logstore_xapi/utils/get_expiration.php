@@ -33,8 +33,8 @@
         return [];
     }
 
-    return [[
+    return [
       "expirationDate" => date('c', $expiretime)
-    ]];
+    ];
   }
 ?>

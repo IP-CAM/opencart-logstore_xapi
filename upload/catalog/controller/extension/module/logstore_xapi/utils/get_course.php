@@ -1,5 +1,5 @@
 <?php
-  require_once('utils/get_expiration.php');
+  require_once('get_expiration.php');
 
   function get_course($order_row, $order_product_row, $general) {
 
