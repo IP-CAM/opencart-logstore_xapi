@@ -2,29 +2,30 @@
 
 ## ToDos
 
-- Add in all other needed info
-- Do other events
-
-- for LRS
-  - Reduce IP addresses that can connect to only the LRS and me
-  - Downgrade to M10
+- Email Brian
+  - problem of batch enrollments with suggestions (after I figure out how exactly he does it) with the result of knowing the effective cost of each enrollment
+  - how do you do coupons? Per product only?
+- non-course product purchases
+  - how to distinguish courses from books from cerego from other
+    - first look for whether the course is in the moodle mapping table (id is the moodle url)
+    - then see if it has exactly one ebook associated with it (id is the reader url)
+    - else "other" (id is the opencart url)
+- include ebooks included in product as extension
+- check order status before sending statement?
+- look into other moodle mapping tables
+- recurring info for courses and products
+  - events for recurring transactions and cancel
+- bring to $general any config info, add open source copyright info, explain library in this README, let LL know about plugin
 
 ## Usage
 
 1) Install `php-cgi` (`sudo apt-get install php5-cgi`)
 2) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
 
+## Notes
+
 cd /var/www/html/opencart2.3/upload
 > catalog/controller/extension/module/logstore_xapi/purchase.php && sudo nano catalog/controller/extension/module/logstore_xapi/purchase.php
-
-
-
-  // non-course product purchases
-  // check order status before sending this over - make sure the transaction was approved!!
-  // other events
-    // recurring transaction
-    // cancel recurring
-  // look through order and order_product for other info we might want
 
   // All students from a particular category on opencart (reflecting the academic discipline)
     // category_description - name
