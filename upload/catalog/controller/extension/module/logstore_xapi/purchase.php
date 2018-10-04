@@ -10,7 +10,7 @@
   require_once('utils/get_institution.php');
   require_once('utils/get_basic_extensions.php');
   require_once('utils/get_affiliate.php');
-  require_once('utils/get_coupons.php');
+  require_once('utils/get_order.php');
 
   function purchase($log, $general) {
 
@@ -97,11 +97,8 @@
             ],
             "extensions" => array_merge(
               get_basic_extensions($log, $general, "purchase"),
-              [
-                "http://lrs.resourcingeducation.com/extension/order-id" => $order_id,
-              ],
-              get_affiliate($order_row['affiliate_id'], $general),
-              get_coupons($order_row, $order_product_row, $general)
+              get_order($order_row, $order_product_row, $general),
+              get_affiliate($order_row['affiliate_id'], $general)
             ),
           ]
         ),
