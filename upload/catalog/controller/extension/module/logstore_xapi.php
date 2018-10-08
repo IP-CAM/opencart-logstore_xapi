@@ -29,11 +29,18 @@
             'source_name' => 'OpenCart',
             'info_extension' => 'http://lrs.learninglocker.net/define/extensions/info',
             'db' => $this->db,
+            'successful_order_status_ids' => [1,3,5,9,14,15,17],  // if I end up doing refund events, perhaps I need to do the initial order also?
             'moodle_url_template' => "https://learn.biblemesh.com/course/view.php?id=MOODLE_ID",
             'ebook_url_template' => "https://read.biblemesh.com/book/EBOOK_ID",
             'ebook_attribute_group_id' => 7,
             'ebook_attribute_description_name' => "Readium Book ID",
             'ebook_attribute_description_language_id' => 1,
+            'affiliate_extension_id' => "http://id.tincanapi.com/extension/training-provider",
+                // other options: https://w3id.org/xapi/acrossx/extensions/school, http://id.tincanapi.com/extension/referrer
+            'customer_group_type' => "http://id.tincanapi.com/activitytype/organization",
+                // other options: http://activitystrea.ms/schema/1.0/organization, http://id.tincanapi.com/activitytype/section
+            'manufacturer_type' => "http://activitystrea.ms/schema/1.0/organization",
+                // other options: http://id.tincanapi.com/activitytype/organization, http://id.tincanapi.com/activitytype/section
             'site_base' => $this->config->get('site_base'),
             'config_name' => $this->config->get('config_name'),
             'config_language' => format_language($this->config->get('config_language')),

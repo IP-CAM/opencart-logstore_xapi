@@ -17,9 +17,7 @@
     return [[
       "id" => $general['site_base'] . "index.php?route=product/manufacturer/info&manufacturer_id=" . $manufacturer_row['manufacturer_id'],
       "definition" => [
-        // "type" => "http://id.tincanapi.com/activitytype/organization",
-        // "type" => "http://id.tincanapi.com/activitytype/section",
-        "type" => "http://activitystrea.ms/schema/1.0/organization",
+        "type" => $general['manufacturer_type'],
         "name" => [
           $general['config_language'] => $manufacturer_row['name'],
         ],

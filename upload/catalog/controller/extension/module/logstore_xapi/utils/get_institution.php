@@ -14,9 +14,7 @@
     return [[
       "id" => $general['site_base'] . "customer/group?customer_group_id=" . $customer_group_description_row['customer_group_id'],
       "definition" => [
-        // "type" => "http://activitystrea.ms/schema/1.0/organization",
-        // "type" => "http://id.tincanapi.com/activitytype/section",
-        "type" => "http://id.tincanapi.com/activitytype/organization",
+        "type" => $general['customer_group_type'],
         "name" => [
           $general['config_language'] => $customer_group_description_row['name'],
         ],
