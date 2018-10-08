@@ -36,6 +36,11 @@
       print_r($log);
       return;
     }
+    $successfulOrderIds = [1,3,5,9,14,15,17];  // if I end up doing refund events, perhaps I need to do the initial order also?
+    if(!in_array($order_row['order_status_id'], $successfulOrderIds)) {
+      echo "    Discarding order id " . $order_id . " due to order status id of " . $order_row['order_status_id'] . "\n";
+      return 'discard log';
+    }
     $orig_config_language = $general['config_language'];
     $general['config_language'] = format_language($order_row['language_code']);
 

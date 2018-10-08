@@ -69,7 +69,9 @@
               require_once('catalog/controller/extension/module/logstore_xapi/' . $eventfunctionmap[$log['event_route']] . '.php');
               $eventfunction = $eventfunctionmap[$log['event_route']];
               $result = $eventfunction($log, $general);
-              if($result) {
+              if($result === 'discard log') {
+                  $ids_to_delete[] = $log['logstore_xapi_log_id'];
+              } else if($result) {
                   $statements = array_merge($statements, $result);
                   $ids_to_delete[] = $log['logstore_xapi_log_id'];
               }
@@ -83,6 +85,7 @@
       
           echo "  Sending " . count($statements) . " statement(s)...\n";
           print_r($statements);
+          print_r($ids_to_delete);
 die();
           
           // send them to the store
