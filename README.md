@@ -1,68 +1,20 @@
 # opencart-logstore_xapi
 
-## ToDos
+Built in similar fashion to [moodle-logstore_xapi](https://github.com/xAPI-vle/moodle-logstore_xapi).
 
-- Email Brian
-  - problem of batch enrollments with suggestions (after I figure out how exactly he does it) with the result of knowing the effective cost of each enrollment (WAITING ON JOHN)
-  - how do you do coupons? Per product only? (WAITING ON JOHN)
-- make sure _description tables I use have a language
-- check order status before sending statement?
-- look into other moodle mapping tables
-- recurring info for courses and products
-  - complete get_product_options and get_product
-  - events for recurring transactions and cancel
-- bring to $general any config info, add open source copyright info, explain library in this README, let LL know about plugin
+Designed for a customized version of OpenCart (based on version 2.3.0.2).
+
+## Limitations and caveats
+
+- This plugin identifies users to the LRS by mbox (email).
+  - This assumes an identical email between Moodle, OpenCart and the Reader each user.
+  - If an email is invalid, this plugin uses the OpenCart customer id, whereas the other systems use their own distinct user ids. Thus, such users will not have their xAPI statements from different origins automatically associated in the LRS.
+- English only
+  - While OpenCart can be set up to be multilingual, this plugin will currently only work for orders and products with language_id=1 (en-gb).
+- Coupons...
 
 ## Usage
 
-1) Install `php-cgi` (`sudo apt-get install php5-cgi`)
-2) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
-
-## Notes
-
-cd /var/www/html/opencart2.3/upload
-> catalog/controller/extension/module/logstore_xapi/purchase.php && sudo nano catalog/controller/extension/module/logstore_xapi/purchase.php
-
-  // All students from a particular category on opencart (reflecting the academic discipline)
-    // category_description - name
-    // partner (called that on frontend) atlas, etc are not listed on course page - might be called manufacturers
-  // All students from a particular partner e.g. Pioneers, Crosslands (‘customer group’ in opencart, tenant, affiliates/referral)
-    // customer_group_description - name
-    // contextActivities > grouping > id :: DONE
-    // eg. https://courses.crosslands.training/ should be distiguishable
-    // affliliate category (eg. atlas, ebooks) look under catalog > affiliate partner
-  // All students with a course expiring in the next 2 months
-    // product tells timeframe to moodle, product > option > registration period / renewal period
-  // Subscriptions live?
-    // BibleMesh institute > reocurring (OpenCart does not have the history of transactions except for the first, but does get alerted to a cancelation; Moodle gets notified upon every renewal.)
-  // How much revenue has a certain course brought in? ($$ used at purchase only? How do coupons/credits work, or purchases via institutions?)
-    // order - price? total?
-    // institutions are problematic because they are entered manually and invoiced in a way that OpenCart knows nothing about.
-  // How many people received or used a certain discount
-    // coupon_history - order_id / coupon - name
-  // Average number of months a student pays for the institute subscription before they cancel it [50% likelihood]
-    // on cancel event, include how long they had it in the statement
-
-- order_product > product_to_category > id, category_description: name (academic discipline)
-  - contextActivities grouping
-- order_product > product > manufacturer: id, name (partner)
-  - contextActivities parent
-- order > customer_group_description: id, name (import for institution)
-  - contextActivities other
-- order > affiliate: id, firstname, lastname (affiliate partner)
-  - context extensions
-- order_product + product_option_value > product_option_value_to_moodle_period: today's date + interval * unit (expire date)
-  - how to determine renewal vs regular??
-  - take recurring into account
-  - how to determine if they bought 6 month or 12 month access??
-  - test with https://courses.biblemesh.com/hebrew/hebrew-first-steps-reading-1-bundle
-  - object extension (OR result duration)
-- order + order_product > order_recurring: recurring_id, recurring_name
-  - object extension
-- order_product: price
-  - object extension OR (result raw score)
-- order + order_product > coupon_history / coupon_product_history > coupon: id, name, code
-  - (contextActivities other OR) context extension
-
-
-
+1) Install the plugin.
+2) Install `php-cgi` (`sudo apt-get install php5-cgi`) on the OpenCart server.
+3) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
