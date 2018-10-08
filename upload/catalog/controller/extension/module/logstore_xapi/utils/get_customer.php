@@ -7,7 +7,7 @@
     if(!$customer_row) return;
 
     $fullname = trim($customer_row['firstname'] . ' ' . $customer_row['lastname']);
-    $hasvalidemail = filter_var($customer_row['email'], FILTER_VALIDATE_EMAIL);
+    $hasvalidemail = mb_ereg_match("[A-Z0-9\\.\\`\\'_%+-]+@[A-Z0-9.-]+\\.[A-Z]{1,63}$", $customer_row['email'], "i");
 
     if ($hasvalidemail) {
       return [
