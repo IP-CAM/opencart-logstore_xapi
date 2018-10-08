@@ -3,17 +3,13 @@
 ## ToDos
 
 - Email Brian
-  - problem of batch enrollments with suggestions (after I figure out how exactly he does it) with the result of knowing the effective cost of each enrollment
-  - how do you do coupons? Per product only?
-- non-course product purchases
-  - how to distinguish courses from books from cerego from other
-    - first look for whether the course is in the moodle mapping table (id is the moodle url)
-    - then see if it has exactly one ebook associated with it (id is the reader url)
-    - else "other" (id is the opencart url)
-- include ebooks included in product as extension
+  - problem of batch enrollments with suggestions (after I figure out how exactly he does it) with the result of knowing the effective cost of each enrollment (WAITING ON JOHN)
+  - how do you do coupons? Per product only? (WAITING ON JOHN)
+- make sure _description tables I use have a language
 - check order status before sending statement?
 - look into other moodle mapping tables
 - recurring info for courses and products
+  - complete get_product_options and get_product
   - events for recurring transactions and cancel
 - bring to $general any config info, add open source copyright info, explain library in this README, let LL know about plugin
 

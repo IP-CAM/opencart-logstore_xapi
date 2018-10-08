@@ -1,5 +1,5 @@
 <?php
-  function get_order_options($order_row, $order_product_row, $general) {
+  function get_product_options($order_row, $order_product_row, $general) {
 
     $product_condition_minus_table = ".product_id='" . $general['db']->escape($order_product_row['product_id']) . "'";
 

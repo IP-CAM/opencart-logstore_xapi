@@ -1,7 +1,7 @@
 <?php
   require_once('utils/format_language.php');
   require_once('utils/get_customer.php');
-  require_once('utils/get_course.php');
+  require_once('utils/get_product.php');
   require_once('utils/get_basic_context.php');
   require_once('utils/get_partner.php');
   require_once('utils/get_site.php');
@@ -59,10 +59,10 @@
     $statements = array();
 
     foreach($order_product_rows as $order_product_row) {
-      $object = get_course($order_row, $order_product_row, $general);
+      $object = get_product($order_row, $order_product_row, $general);
 
       if(!$object) {
-        echo "    Skipping, as this is not a course:\n";
+        echo "    Skipping—product not found.\n";
         print_r($log);
         continue;
       }
