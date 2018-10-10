@@ -1,5 +1,6 @@
 <?php
   require_once('get_product_options.php');
+  require_once('get_ebooks.php');
 
   function get_product($order_row, $order_product_row, $general) {
 
@@ -10,22 +11,7 @@
     )->row;
 
     // get the ebooks included in product
-    $product_attribute_row = $general['db']->query(
-      "SELECT pa.text FROM `" . DB_PREFIX . "product_attribute` as pa " .
-      "LEFT JOIN `" . DB_PREFIX . "attribute` as a ON (pa.attribute_id=a.attribute_id) " .
-      "LEFT JOIN `" . DB_PREFIX . "attribute_description` as ad " .
-        "ON (pa.attribute_id=ad.attribute_id AND ad.language_id='" . $general['language_id'] . "') " .
-      "WHERE product_id='" . $general['db']->escape($order_product_row['product_id']) . "' " .
-        "AND a.attribute_group_id='" . $general['ebook_attribute_group_id'] . "' " .
-        "AND ad.name='" . $general['ebook_attribute_description_name'] . "'"
-    )->row;
-    $includedEbookURLs = array();
-    if($product_attribute_row) {
-      $ebookIds = mb_split(' ', $product_attribute_row['text']);
-      foreach($ebookIds as $ebookId) {
-        $includedEbookURLs[] = mb_ereg_replace('EBOOK_ID', $ebookId, $general['ebook_url_template']);
-      }
-    }
+    $includedEbookInfo = get_ebooks($order_product_row, $general);
 
     // get the product page
     $productPage = $general['site_base'] . "index.php?route=product/product&product_id=" . $order_product_row['product_id'];
@@ -35,8 +21,8 @@
       $id = mb_ereg_replace('MOODLE_ID', $product_moodle_mapping_row['moodle_course_id'], $general['moodle_url_template']);
       $type = "http://id.tincanapi.com/activitytype/lms/course";
 
-    } else if(count($includedEbookURLs) === 1) {  // it is a book
-      $id = $includedEbookURLs[0];
+    } else if(count($includedEbookInfo) === 1) {  // it is a book
+      $id = $includedEbookInfo[0]['id'];
       $type = "http://id.tincanapi.com/activitytype/book";
 
     } else {  // it is some other sort of product
@@ -68,8 +54,11 @@
             ]
             : array()
           ),
-          count($includedEbookURLs) === 0 ? [] : [
-            "http://lrs.resourcingeducation.com/extension/included-ebooks" => $includedEbookURLs,
+          count($includedEbookInfo) === 0 ? [] : [
+            "http://lrs.resourcingeducation.com/extension/included-ebooks" => $includedEbookInfo,
+          ],
+          !(count($includedEbookInfo) === 1 && isset($includedEbookInfo[0]['isbn'])) ? [] : [
+            "http://id.tincanapi.com/extension/isbn" => $includedEbookInfo[0]['isbn'],
           ]
         ),
       ],
