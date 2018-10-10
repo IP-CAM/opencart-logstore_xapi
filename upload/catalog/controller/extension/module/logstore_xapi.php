@@ -34,7 +34,6 @@
             'ebook_url_template' => "https://read.biblemesh.com/book/EBOOK_ID",
             'ebook_attribute_group_id' => 7,
             'ebook_attribute_description_name' => "Readium Book ID",
-            'ebook_attribute_description_language_id' => 1,
             'affiliate_extension_id' => "http://id.tincanapi.com/extension/training-provider",
                 // other options: https://w3id.org/xapi/acrossx/extensions/school, http://id.tincanapi.com/extension/referrer
             'customer_group_type' => "http://id.tincanapi.com/activitytype/organization",
@@ -43,7 +42,7 @@
                 // other options: http://id.tincanapi.com/activitytype/organization, http://id.tincanapi.com/activitytype/section
             'site_base' => $this->config->get('site_base'),
             'config_name' => $this->config->get('config_name'),
-            'config_language' => format_language($this->config->get('config_language')),
+            'language_id' => 1,  // presently, this plugin only works with a single language
             'plugin_url' => "https://lrs.resourcingeducation.com/plugins/opencart-logstore_xapi",
             'plugin_version' => "1.0",
           ];

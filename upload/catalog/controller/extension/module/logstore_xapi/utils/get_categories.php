@@ -5,7 +5,8 @@
     $category_rows = $general['db']->query(
       "SELECT cd.category_id, cd.name " .
       "FROM `" . DB_PREFIX . "product_to_category` as ptc " .
-      "LEFT JOIN `" . DB_PREFIX . "category_description` as cd ON (ptc.category_id=cd.category_id) " .
+      "LEFT JOIN `" . DB_PREFIX . "category_description` as cd " .
+        "ON (ptc.category_id=cd.category_id AND cd.language_id='" . $general['language_id'] . "') " .
       "WHERE ptc.product_id='" . $general['db']->escape($order_product_row['product_id']) . "'"
     )->rows;
 
@@ -17,7 +18,7 @@
         "definition" => [
           "type" => "http://id.tincanapi.com/activitytype/category",
           "name" => [
-            $general['config_language'] => $category_row['name'],
+            $general['language_code'] => $category_row['name'],
           ],
         ],
         "objectType" => "Activity",

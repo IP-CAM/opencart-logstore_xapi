@@ -19,7 +19,7 @@
       "definition" => [
         "type" => $general['manufacturer_type'],
         "name" => [
-          $general['config_language'] => $manufacturer_row['name'],
+          $general['language_code'] => $manufacturer_row['name'],
         ],
       ],
       "objectType" => "Activity"

@@ -6,7 +6,7 @@
       "definition" => [
         "type" => "http://activitystrea.ms/schema/1.0/service",
         "name" => [
-          $general['config_language'] => $general['config_name'],
+          $general['language_code'] => $general['config_name'],
         ],
       ],
       "objectType" => "Activity"

@@ -6,7 +6,7 @@
       "definition" => [
         "type" => "http://id.tincanapi.com/activitytype/source",
         "name" => [
-          $general['config_language'] => "OpenCart",
+          $general['language_code'] => "OpenCart",
         ],
       ],
       "objectType" => "Activity",

@@ -40,8 +40,12 @@
       echo "    Discarding order id " . $order_id . " due to order status id of " . $order_row['order_status_id'] . "\n";
       return 'discard log';
     }
-    $orig_config_language = $general['config_language'];
-    $general['config_language'] = format_language($order_row['language_code']);
+    if($order_row['language_id'] != $general['language_id']) {
+      echo "    Invalid order language:\n";
+      print_r($log);
+      return;
+    }
+    $general['language_code'] = format_language($order_row['language_code']);
 
     $order_product_rows = $general['db']->query(
       "SELECT * FROM `" . DB_PREFIX . "order_product` " .
@@ -76,7 +80,7 @@
         "verb" => [
           "id" => "http://activitystrea.ms/schema/1.0/purchase",
           "display" => [
-            $general['config_language'] => "purchased",
+            $general['language_code'] => "purchased",
           ],
         ],
         "object" => $object,
@@ -114,8 +118,6 @@
         }
       }
     }
-
-    $general['config_language'] = $orig_config_language;
 
     return $statements;
 

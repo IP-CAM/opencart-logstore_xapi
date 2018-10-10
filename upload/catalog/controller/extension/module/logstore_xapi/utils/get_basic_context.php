@@ -3,7 +3,7 @@
 
     return [
       "platform" => "OpenCart",
-      "language" => $general['config_language'],
+      "language" => $general['language_code'],
     ];
   }
 ?>

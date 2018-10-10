@@ -14,7 +14,7 @@
       "SELECT pa.text FROM `" . DB_PREFIX . "product_attribute` as pa " .
       "LEFT JOIN `" . DB_PREFIX . "attribute` as a ON (pa.attribute_id=a.attribute_id) " .
       "LEFT JOIN `" . DB_PREFIX . "attribute_description` as ad " .
-        "ON (pa.attribute_id=ad.attribute_id AND ad.language_id='" . $general['ebook_attribute_description_language_id'] . "') " .
+        "ON (pa.attribute_id=ad.attribute_id AND ad.language_id='" . $general['language_id'] . "') " .
       "WHERE product_id='" . $general['db']->escape($order_product_row['product_id']) . "' " .
         "AND a.attribute_group_id='" . $general['ebook_attribute_group_id'] . "' " .
         "AND ad.name='" . $general['ebook_attribute_description_name'] . "'"
@@ -51,7 +51,7 @@
       "definition" => [
         "type" => $type,
         "name" => [
-          $general['config_language'] => $order_product_row['name'],
+          $general['language_code'] => $order_product_row['name'],
         ],
         "moreInfo" => $productPage,
         "extensions" => array_merge(
