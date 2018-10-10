@@ -18,3 +18,28 @@ Designed for a customized version of OpenCart (based on version 2.3.0.2).
 1) Install the plugin.
 2) Install `php-cgi` (`sudo apt-get install php5-cgi`) on the OpenCart server.
 3) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
+
+## Setting up book meta data in OpenCart
+
+1) Create an Attribute in OpenCart called “Readium Book Info”
+2) For each product with one or more ebooks related to it (whether it is an ebook or course product), add this attribute with values in the following format:
+
+```
+ID=35
+TITLE=Greek for the Rest of Us: The Essentials of Biblical Greek, Second Edition
+AUTHOR=William D. Mounce
+PUBLISHER=HarperCollins Christian Publishing
+ISBN=9780310518099
+
+ID=24
+TITLE=A Theology of James, Peter, and Jude
+AUTHOR=Peter H. Davids
+PUBLISHER=HarperCollins Christian Publishing
+ISBN=9780310519430
+```
+
+Note: 
+* the ID is the reader id
+* an empty line must be between books
+* use the code editing mode </> in the attribute editor and toggle it off before saving, as is done with the “Readium Book ID” attribute
+* products still need the “Readium Book ID” attribute
