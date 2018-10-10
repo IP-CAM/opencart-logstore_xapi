@@ -15,13 +15,15 @@
 
     // get the product page
     $productPage = $general['site_base'] . "index.php?route=product/product&product_id=" . $order_product_row['product_id'];
-
+    $isEbook = false;
+    
     // get info based on product type
     if($product_moodle_mapping_row) {  // it is a course
       $id = mb_ereg_replace('MOODLE_ID', $product_moodle_mapping_row['moodle_course_id'], $general['moodle_url_template']);
       $type = "http://id.tincanapi.com/activitytype/lms/course";
 
     } else if(count($includedEbookInfo) === 1) {  // it is a book
+      $isEbook = true;
       $id = $includedEbookInfo[0]['id'];
       $type = "http://id.tincanapi.com/activitytype/book";
 
@@ -57,7 +59,7 @@
           count($includedEbookInfo) === 0 ? [] : [
             "http://lrs.resourcingeducation.com/extension/included-ebooks" => $includedEbookInfo,
           ],
-          !(count($includedEbookInfo) === 1 && isset($includedEbookInfo[0]['isbn'])) ? [] : [
+          !($isEbook && isset($includedEbookInfo[0]['isbn'])) ? [] : [
             "http://id.tincanapi.com/extension/isbn" => $includedEbookInfo[0]['isbn'],
           ]
         ),
