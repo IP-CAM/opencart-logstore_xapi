@@ -21,8 +21,14 @@ Designed for a customized version of OpenCart (based on version 2.3.0.2).
 
 ## Setting up book meta data in OpenCart
 
-1) Create an Attribute in OpenCart called “Readium Book Info”
-2) For each product with one or more ebooks related to it (whether it is an ebook or course product), add this attribute with values in the following format:
+#### 1) Create several new Attributes in OpenCart called the following:
+  - Readium Book Info
+  - Readium Book Title
+  - Readium Book Author
+  - Readium Book Publisher
+  - Readium Book ISBN
+
+#### 2) For each product with MORE THAN ONE ebook related to it, give the Readium Book Info attribute a value in the following format.
 
 ```
 ID=35
@@ -31,15 +37,19 @@ AUTHOR=William D. Mounce
 PUBLISHER=HarperCollins Christian Publishing
 ISBN=9780310518099
 
-ID=24
+ID=36
 TITLE=A Theology of James, Peter, and Jude
 AUTHOR=Peter H. Davids
 PUBLISHER=HarperCollins Christian Publishing
 ISBN=9780310519430
 ```
 
-Note: 
+Notes:
+
 * the ID is the reader id
 * an empty line must be between books
 * use the code editing mode </> in the attribute editor and toggle it off before saving, as is done with the “Readium Book ID” attribute
-* products still need the “Readium Book ID” attribute
+
+#### 3) For each product with ONLY ONE ebook related to it, add the title, author, publisher and isbn into the other new attribute fields (Readium Book Title, etc.)
+
+Final note: All products with any ebooks (one or more) still need the “Readium Book ID” attribute

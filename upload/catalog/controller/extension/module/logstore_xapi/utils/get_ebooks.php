@@ -2,26 +2,40 @@
   function get_ebooks($order_product_row, $general) {
 
     // get the ebooks included in product
-    $product_attribute_row = $general['db']->query(
-      "SELECT pa.text FROM `" . DB_PREFIX . "product_attribute` as pa " .
+    $product_attribute_rows = $general['db']->query(
+      "SELECT pa.text, ad.name FROM `" . DB_PREFIX . "product_attribute` as pa " .
       "LEFT JOIN `" . DB_PREFIX . "attribute` as a ON (pa.attribute_id=a.attribute_id) " .
       "LEFT JOIN `" . DB_PREFIX . "attribute_description` as ad " .
         "ON (pa.attribute_id=ad.attribute_id AND ad.language_id='" . $general['language_id'] . "') " .
       "WHERE product_id='" . $general['db']->escape($order_product_row['product_id']) . "' " .
-        "AND ad.name='" . $general['ebook_attribute_description_name'] . "'"
-    )->row;
+        "AND ad.name LIKE '" . $general['ebook_attributes_description_name_prefix'] . "%'"
+    )->rows;
+
+    // get info from info attribute if exists, otherwise from individual attributes
+    $multipleEbooksInfoInFormation = array();
+    foreach($product_attribute_rows as $product_attribute_row) {
+      $infoKey = mb_strtolower(mb_substr($product_attribute_row['name'], mb_strlen($general['ebook_attributes_description_name_prefix'])));
+      if($infoKey === "info") {
+        $multipleEbooksInfo = $product_attribute_row['text'];
+        break;
+      }
+      $multipleEbooksInfoInFormation[] = $infoKey . "=" . strip_tags(html_entity_decode($product_attribute_row['text']));
+    }
+    if(!isset($multipleEbooksInfo)) {
+      $multipleEbooksInfo = implode("\n", $multipleEbooksInfoInFormation);
+    }
 
     $includedEbookInfo = array();
     $badInfo = false;
 
-    if($product_attribute_row) {
-      $product_attribute_row_lines = mb_split("\n", $product_attribute_row['text']);
-      for($i=0; $i<count($product_attribute_row_lines); $i++) {
+    if($multipleEbooksInfo) {
+      $productAttributeRowLines = mb_split("\n", $multipleEbooksInfo);
+      for($i=0; $i<count($productAttributeRowLines); $i++) {
         $ebookInfo = array();
-        while($i<count($product_attribute_row_lines)) {
-          if(trim($product_attribute_row_lines[$i]) === '') break;
+        while($i<count($productAttributeRowLines)) {
+          if(trim($productAttributeRowLines[$i]) === '') break;
 
-          $infoPieces = mb_split("=", $product_attribute_row_lines[$i++], 2);
+          $infoPieces = mb_split("=", $productAttributeRowLines[$i++], 2);
           $infoKey = mb_strtolower($infoPieces[0]);
           $infoValue = trim($infoPieces[1]);
 
