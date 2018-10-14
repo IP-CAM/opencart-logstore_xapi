@@ -11,6 +11,12 @@
         "AND ad.name LIKE '" . $general['ebook_attributes_description_name_prefix'] . "%'"
     )->rows;
 
+    // get the product's isbn
+    $product_row = $general['db']->query(
+      "SELECT p.isbn FROM `" . DB_PREFIX . "product` as p " .
+      "WHERE p.product_id='" . $general['db']->escape($order_product_row['product_id']) . "'"
+    )->row;
+
     // get info from info attribute if exists, otherwise from individual attributes
     $multipleEbooksInfoInFormation = array();
     foreach($product_attribute_rows as $product_attribute_row) {
@@ -22,6 +28,9 @@
       $multipleEbooksInfoInFormation[] = $infoKey . "=" . strip_tags(html_entity_decode($product_attribute_row['text']));
     }
     if(!isset($multipleEbooksInfo)) {
+      if($product_row && $product_row['isbn']) {
+        $multipleEbooksInfoInFormation[] = "isbn=" . $product_row['isbn'];
+      }
       $multipleEbooksInfo = implode("\n", $multipleEbooksInfoInFormation);
     }
 
@@ -43,7 +52,8 @@
             $badInfo = true;
           }
 
-          if(isset($ebookInfo[$infoKey])) {
+          if(isset($ebookInfo[$infoKey]) && $infoKey !== 'isbn') {
+            // isbn is an exception because they may have READIUM_BOOK_ISBN and ISBN both set.
             $badInfo = true;
           }
 
