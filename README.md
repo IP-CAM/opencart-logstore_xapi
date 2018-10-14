@@ -26,7 +26,6 @@ Designed for a customized version of OpenCart (based on version 2.3.0.2).
   - Readium Book Title
   - Readium Book Author
   - Readium Book Publisher
-  - Readium Book ISBN
 
 #### 2) For each product with MORE THAN ONE ebook related to it, give the Readium Book Info attribute a value in the following format.
 
@@ -50,6 +49,6 @@ Notes:
 * an empty line must be between books
 * use the code editing mode </> in the attribute editor and toggle it off before saving, as is done with the “Readium Book ID” attribute
 
-#### 3) For each product with ONLY ONE ebook related to it, add the title, author, publisher and isbn into the other new attribute fields (Readium Book Title, etc.)
+#### 3) For each product with ONLY ONE ebook related to it, add the title, author and publisher into the other new attribute fields (Readium Book Title, etc.). Add the ISBN under the corresponding field in the Data tab on the Edit product page.
 
 Final note: All products with any ebooks (one or more) still need the “Readium Book ID” attribute
