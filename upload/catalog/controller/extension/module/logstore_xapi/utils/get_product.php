@@ -2,7 +2,7 @@
   require_once('get_product_options.php');
   require_once('get_ebooks.php');
 
-  function get_product($order_row, $order_product_row, $general) {
+  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $general) {
 
     // get the moodle course id from the DB
     $product_moodle_mapping_row = $general['db']->query(
@@ -34,6 +34,19 @@
 
     $isRecurring = false;
 
+    $cost = $order_product_row['price'];
+
+    // Figure it out if the coupon clearly relates to this product only, else divide it
+    // between the products
+    foreach($coupon_rows as $coupon_row) {
+      if(in_array($order_product_row['product_id'], $coupon_row['product_ids'])) {
+        $cost += $coupon_row['amount'];
+
+      } else if(count($coupon_row['product_ids']) === 0) {
+        $cost += $coupon_row['amount'] * ($order_product_row['price'] / $totalProductPrices);
+      }
+    }
+
     return [
       "id" => $id,
       "definition" => [
@@ -46,6 +59,7 @@
           get_product_options($order_row, $order_product_row, $general),
           [
             "http://lrs.resourcingeducation.com/extension/price" => $order_product_row['price'],
+            "http://lrs.resourcingeducation.com/extension/cost" => $cost,
           ],
           ($isRecurring
             ? [

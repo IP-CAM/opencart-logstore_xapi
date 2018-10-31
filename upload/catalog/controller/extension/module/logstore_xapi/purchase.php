@@ -1,6 +1,7 @@
 <?php
   require_once('utils/format_language.php');
   require_once('utils/get_customer.php');
+  require_once('utils/get_coupon_rows.php');
   require_once('utils/get_product.php');
   require_once('utils/get_basic_context.php');
   require_once('utils/get_partner.php');
@@ -66,8 +67,15 @@
 
     $statements = array();
 
+    $coupon_rows = get_coupon_rows($order_row, $general);
+    
+    $totalProductPrices = 0;
     foreach($order_product_rows as $order_product_row) {
-      $object = get_product($order_row, $order_product_row, $general);
+      $totalProductPrices += $order_product_row['total'];
+    }
+
+    foreach($order_product_rows as $order_product_row) {
+      $object = get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $general);
 
       if(!$object) {
         echo "    Skipping—product not found.\n";
@@ -105,7 +113,7 @@
             ],
             "extensions" => array_merge(
               get_basic_extensions($log, $general, "purchase"),
-              get_order($order_row, $order_product_row, $general),
+              get_order($order_row, $coupon_rows, $general),
               get_affiliate($order_row['affiliate_id'], $general)
             ),
           ]

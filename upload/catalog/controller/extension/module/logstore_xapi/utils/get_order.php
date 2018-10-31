@@ -1,38 +1,39 @@
 <?php
-  require_once('get_coupons.php');
-
-  function get_order($order_row, $order_product_row, $general) {
+  
+  function get_order($order_row, $coupon_rows, $general) {
 
     // get the order totals from the DB
-    $order_total_rows = $general['db']->query(
-      "SELECT ot.code, ot.value " .
+    $order_total_row = $general['db']->query(
+      "SELECT ot.value " .
       "FROM `" . DB_PREFIX . "order_total` as ot " .
       "WHERE ot.order_id='" . $general['db']->escape($order_row['order_id']) . "' " .
-        "AND ot.code IN ('sub_total', 'total') "
-    )->rows;
-
-    $totalinfo = array();
-
-    foreach($order_total_rows as $order_total_row) {
-      $totalinfo[$order_total_row['code']] = $order_total_row['value'];
-    }
+        "AND ot.code='" . $general['db']->escape('sub_total') . "'"
+    )->row;
 
     $order = [
       "id" => $order_row['order_id'],
+      "total" => $order_row['total'],
     ];
     
-    if(isset($totalinfo['sub_total'])) {
-      $order["subtotal"] = $totalinfo['sub_total'];
+    if($order_total_row) {
+      $order["subtotal"] = $order_total_row['value'];
     }
     
-    $coupons = get_coupons($order_row, $order_product_row, $general);
+    if(count($coupon_rows) > 0) {
 
-    if(count($coupons) > 0) {
-      $order["coupons"] = $coupons;
-    }
+      // Get all coupons related to this order
 
-    if(isset($totalinfo['total'])) {
-      $order["total"] = $totalinfo['total'];
+      $order["coupons"] = array();
+
+      foreach($coupon_rows as $coupon_row) {
+        $order["coupons"][] = [
+          "id" => $coupon_row['coupon_id'],
+          "code" => $coupon_row['code'],
+          "name" => $coupon_row['name'],
+          "effective_amount" => $coupon_row['amount'],
+        ];
+      }
+    
     }
 
     return [
