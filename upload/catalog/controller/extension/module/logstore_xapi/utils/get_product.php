@@ -2,7 +2,7 @@
   require_once('get_product_options.php');
   require_once('get_ebooks.php');
 
-  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $general) {
+  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general) {
 
     // get the moodle course id from the DB
     $product_moodle_mapping_row = $general['db']->query(
@@ -45,6 +45,10 @@
       } else if(count($coupon_row['product_ids']) === 0) {
         $cost += $coupon_row['amount'] * ($order_product_row['price'] / $totalProductPrices);
       }
+    }
+
+    if($isRefund) {
+      $cost *= -1;
     }
 
     return [

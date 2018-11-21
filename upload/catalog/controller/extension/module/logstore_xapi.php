@@ -29,7 +29,8 @@
             'source_name' => 'OpenCart',
             'info_extension' => 'http://lrs.learninglocker.net/define/extensions/info',
             'db' => $this->db,
-            'successful_order_status_ids' => [1,3,5,9,14,15,17],  // if I end up doing refund events, perhaps I need to do the initial order also?
+            'successful_order_status_ids' => [1,3,5,9,14,15,17],
+            'refunded_order_status_ids' => [11,12,13],
             'moodle_url_template' => "https://learn.biblemesh.com/course/view.php?id=MOODLE_ID",
             'ebook_url_template' => "https://read.biblemesh.com/book/EBOOK_ID",
             'ebook_attributes_description_name_prefix' => "Readium Book ",

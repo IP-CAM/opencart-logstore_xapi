@@ -13,6 +13,7 @@
     $order = [
       "id" => $order_row['order_id'],
       "total" => $order_row['total'],
+      "status_id" => $order_row['order_status_id'],
     ];
     
     if($order_total_row) {

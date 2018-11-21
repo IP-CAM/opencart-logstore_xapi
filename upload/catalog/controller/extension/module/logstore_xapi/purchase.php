@@ -17,7 +17,8 @@
 
     // get the order id
     $data = json_decode($log['data']);
-    $order_id = $data[0];
+    $order_id = intval($data[0]);
+    $order_status_id = intval($data[1]);
 
     if(!$order_id) {
       echo "    Invalid purchase log:\n";
@@ -37,16 +38,35 @@
       print_r($log);
       return;
     }
-    if(!in_array($order_row['order_status_id'], $general['successful_order_status_ids'])) {
-      echo "    Discarding order id " . $order_id . " due to order status id of " . $order_row['order_status_id'] . "\n";
-      return 'discard log';
-    }
     if($order_row['language_id'] != $general['language_id']) {
       echo "    Invalid order language:\n";
       print_r($log);
       return;
     }
+
     $general['language_code'] = format_language($order_row['language_code']);
+
+    $isRefund = in_array($order_status_id, $general['refunded_order_status_ids']);
+    $verb = in_array($order_status_id, $general['successful_order_status_ids'])
+      ? [
+        "id" => "http://activitystrea.ms/schema/1.0/purchase",
+        "display" => [
+          $general['language_code'] => "purchased",
+        ],
+      ]
+      : ($isRefund
+        ? [
+          "id" => "http://lrs.resourcingeducation.com/extension/refunded",
+          "display" => [
+            $general['language_code'] => "was refunded for",
+          ],
+        ]
+        : false
+      );
+    if(!$verb) {
+      echo "    Discarding order id " . $order_id . " due to order status id of " . $order_status_id . ". (Current order status id is " . $order_row['order_status_id'] . ".)\n";
+      return 'discard log';
+    }
 
     $order_product_rows = $general['db']->query(
       "SELECT * FROM `" . DB_PREFIX . "order_product` " .
@@ -58,7 +78,7 @@
       return;
     }
 
-    $actor = get_customer($log['customer_id'], $general);
+    $actor = get_customer($order_row['customer_id'], $general);
     if(!$actor) {
       echo "    Cannot find customer who made the purchase:\n";
       print_r($log);
@@ -75,7 +95,7 @@
     }
 
     foreach($order_product_rows as $order_product_row) {
-      $object = get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $general);
+      $object = get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general);
 
       if(!$object) {
         echo "    Skipping—product not found.\n";
@@ -85,12 +105,7 @@
 
       $statements[] = $newstatement = [
         "actor" => $actor,
-        "verb" => [
-          "id" => "http://activitystrea.ms/schema/1.0/purchase",
-          "display" => [
-            $general['language_code'] => "purchased",
-          ],
-        ],
+        "verb" => $verb,
         "object" => $object,
         "timestamp" => date('c', strtotime($order_row['date_added'])),
         "context" => array_merge(
