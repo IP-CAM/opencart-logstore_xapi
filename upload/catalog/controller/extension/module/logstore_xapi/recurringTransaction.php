@@ -1,6 +1,7 @@
 <?php
   require_once('utils/format_language.php');
   require_once('utils/get_customer.php');
+  require_once('utils/get_coupon_rows.php');
   require_once('utils/get_product.php');
   require_once('utils/get_basic_context.php');
   require_once('utils/get_partner.php');
@@ -126,23 +127,23 @@
     $general['language_code'] = format_language($order_row['language_code']);
 
     $recurringPurchaseVerb = [
-      "id" => "http://activitystrea.ms/schema/1.0/purchase",
+      "id" => "http://lrs.resourcingeducation.com/verb/paid-recurring",
       "display" => [
-        $general['language_code'] => "purchased",
+        $general['language_code'] => "made recurring payment for",
       ],
     ];
 
     $recurringCancelVerb = [
-      "id" => "http://activitystrea.ms/schema/1.0/cancel",
+      "id" => "http://lrs.resourcingeducation.com/verb/cancel-recurring",
       "display" => [
-        $general['language_code'] => "canceled",
+        $general['language_code'] => "canceled recurring payment for",
       ],
     ];
 
     $recurringFailureVerb = [
-      "id" => "http://lrs.resourcingeducation.com/verb/error",
+      "id" => "http://lrs.resourcingeducation.com/verb/error-recurring",
       "display" => [
-        $general['language_code'] => "failed to execute",
+        $general['language_code'] => "failed to execute recurring for",
       ],
     ];
 
@@ -164,7 +165,7 @@
       "WHERE product_id='" . $general['db']->escape($order_recurring_transaction_row['product_id']) . "' " .
         "AND order_id='" . $general['db']->escape($order_id) . "'"
     )->row;
-    if($order_product_row) {
+    if(!$order_product_row) {
       echo "    Cannot find order products for recurring transaction:\n";
       print_r($log);
       return;
@@ -179,6 +180,9 @@
 
     $statements = array();
 
+    $coupon_rows = get_coupon_rows($order_row, $general);
+
+    // Don't sent $coupon_rows to get_product because this is not the initial transaction.
     $object = get_product($order_row, $order_product_row, array(), null, false, $general);
 
     if(!$object) {
@@ -211,7 +215,7 @@
             ),
           ],
           "extensions" => array_merge(
-            get_basic_extensions($log, $general, "purchase"),
+            get_basic_extensions($log, $general, "recurringTransaction"),
             get_order($order_row, $coupon_rows, $general),
             get_affiliate($order_row['affiliate_id'], $general)
           ),
