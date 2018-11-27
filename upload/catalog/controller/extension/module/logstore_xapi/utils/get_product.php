@@ -49,7 +49,7 @@
         "price" => $order_recurring_row['recurring_price'],
       ];
 
-      if($order_recurring_row['recurring_trial'] == "1") {
+      if($order_recurring_row['trial'] == "1") {
         $idx = count($recurringInfo) - 1;
         $recurringInfo[$idx]["trial"] = [
           "frequency" => $order_recurring_row['trial_frequency'],
