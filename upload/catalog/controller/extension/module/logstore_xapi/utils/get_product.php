@@ -32,7 +32,33 @@
       $type = "http://activitystrea.ms/schema/1.0/product";
     }
 
-    $isRecurring = false;
+    // get the recurring info
+    $recurringInfo = array();
+    $order_recurring_rows = $general['db']->query(
+      "SELECT * FROM `" . DB_PREFIX . "order_recurring` as or1 " .
+      "WHERE order_id='" . $general['db']->escape($order_row['order_id']) . "' " .
+        "AND product_id='" . $general['db']->escape($order_product_row['product_id']) . "'"
+    )->rows;
+    foreach($order_recurring_rows as $order_recurring_row) {
+      $recurringInfo[] = [
+        "id" => $order_recurring_row['recurring_id'],
+        "name" => $order_recurring_row['recurring_name'],
+        "frequency" => $order_recurring_row['recurring_frequency'],
+        "cycle" => $order_recurring_row['recurring_cycle'],
+        "duration" => $order_recurring_row['recurring_duration'],
+        "price" => $order_recurring_row['recurring_price'],
+      ];
+
+      if($order_recurring_row['recurring_trial'] == "1") {
+        $idx = count($recurringInfo) - 1;
+        $recurringInfo[$idx]["trial"] = [
+          "frequency" => $order_recurring_row['trial_frequency'],
+          "cycle" => $order_recurring_row['trial_cycle'],
+          "duration" => $order_recurring_row['trial_duration'],
+          "price" => $order_recurring_row['trial_price'],
+        ];
+      }
+    }
 
     $cost = $order_product_row['price'];
 
@@ -66,12 +92,9 @@
             "http://lrs.resourcingeducation.com/extension/price" => $order_product_row['price'],
             "http://lrs.resourcingeducation.com/extension/cost" => $cost,
           ],
-          ($isRecurring
+          (count($recurringInfo) > 0
             ? [
-              "http://lrs.resourcingeducation.com/extension/recurring-subscription" => [
-                "id" => 123,
-                "period" => "??",
-              ]
+              "http://lrs.resourcingeducation.com/extension/recurring-subscriptions" => $recurringInfo,
             ]
             : array()
           ),
