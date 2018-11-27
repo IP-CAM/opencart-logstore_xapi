@@ -16,7 +16,7 @@
   function purchase($log, $general) {
 
     // get the order id
-    $data = json_decode($log['data']);
+    $data = json_decode($log['data'], true);
     $order_id = intval($data[0]);
     $order_status_id = intval($data[1]);
 
@@ -56,7 +56,7 @@
       ]
       : ($isRefund
         ? [
-          "id" => "http://lrs.resourcingeducation.com/extension/refunded",
+          "id" => "http://lrs.resourcingeducation.com/verb/refunded",
           "display" => [
             $general['language_code'] => "was refunded for",
           ],
