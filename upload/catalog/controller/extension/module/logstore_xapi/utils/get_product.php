@@ -38,14 +38,13 @@
 
     // Figure it out if the coupon clearly relates to this product only, else divide it
     // between the products
-    if($totalProductPrices) {
-      foreach($coupon_rows as $coupon_row) {
-        if(in_array($order_product_row['product_id'], $coupon_row['product_ids'])) {
-          $cost += $coupon_row['amount'];
-  
-        } else if(count($coupon_row['product_ids']) === 0) {
-          $cost += $coupon_row['amount'] * ($order_product_row['price'] / $totalProductPrices);
-        }
+    foreach($coupon_rows as $coupon_row) {
+      if(in_array($order_product_row['product_id'], $coupon_row['product_ids'])) {
+        $cost += $coupon_row['amount'];
+
+      } else if(count($coupon_row['product_ids']) === 0) {
+        $totalPrice = $totalProductPrices ? $totalProductPrices : $order_product_row['price'];
+        $cost += $coupon_row['amount'] * ($order_product_row['price'] / $totalProductPrices);
       }
     }
 
