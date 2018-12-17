@@ -50,6 +50,19 @@
 
     }
 
+    if(isset($order_row['custom_field'])) {
+      $custom_field = json_decode($order_row['custom_field'], TRUE);
+
+      if(
+        is_array($custom_field)
+        && isset($custom_field['import_info'])
+        && isset($custom_field['import_info']['products'])
+        && isset($custom_field['import_info']['products'][$order_product_row['product_id']])
+      ) {
+        $options[] = $custom_field['import_info']['products'][$order_product_row['product_id']];
+      }
+    }
+
     if(count($options) === 0) {
       return [];
     }
