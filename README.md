@@ -11,13 +11,37 @@ Designed for a customized version of OpenCart (based on version 2.3.0.2).
   - If an email is invalid, this plugin uses the OpenCart customer id, whereas the other systems use their own distinct user ids. Thus, such users will not have their xAPI statements from different origins automatically associated in the LRS.
 - English only
   - While OpenCart can be set up to be multilingual, this plugin will currently only work for orders and products with language_id=1 (en-gb).
-- Coupons...
+- Coupons are listed as a part of the order under `extensions` and reduced from the `cost` of the statement's specific item as accurately as possible. (OpenCart's coupon functionality makes it extremely difficult to know which products a coupon is applied to in multi-product orders with certain types of coupons.) 
+- Specials and discounts are not distinguished, but simply reflected in the `price` and `cost` of the product. (Again, OpenCart's handling of these makes it nearly impossible to be more precise.)
 
-## Usage
+## Installation and usage
 
-1) Install the plugin.
-2) Install `php-cgi` (`sudo apt-get install php5-cgi`) on the OpenCart server.
-3) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
+1) Set up book meta data. (see below)
+2) Copy in the files from this repo.
+3) Install the plugin.
+4) Create xapi logs from past orders. (see below)
+5) Install `php-cgi` (`sudo apt-get install php5-cgi`) on the OpenCart server (needed for the cron).
+6) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
+
+## Create xapi logs for past orders
+
+Replace `comma-separated-test-customer-ids-here` and `date-and-time-of-install-here` appropriately prior to running this on the DB.
+
+```sql
+INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
+  (
+    SELECT
+      'checkout/order/addOrderHistory',
+      CONCAT('[', order_id, ',"', order_status_id, '"]'),
+      customer_id,
+      '2018-12-27'
+    FROM oc_order
+    WHERE 
+      customer_id NOT IN ( comma-separated-test-customer-ids-here )
+      AND order_status_id = 5
+      AND date_added < "date-and-time-of-install-here"
+  )
+```
 
 ## Setting up book meta data in OpenCart
 
