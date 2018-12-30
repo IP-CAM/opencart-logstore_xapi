@@ -54,23 +54,6 @@
       $type = $transactionTypes[$typeName];
       $amount = isset($request['payment_gross']) ? floatval($request['payment_gross']) : 0;
   
-    } else if(
-      count($data) === 2
-      && is_int($data[0])
-      && is_int($data[1])
-      // && mb_ereg_match('^[0-9]+$', $data[0])
-      // && mb_ereg_match('^[0-9]+$', $data[1])
-    ) {
-      // Coming from catalog/model/account/recurring/addOrderRecurringTransaction
-
-      $order_recurring_id = $data[0];
-      $type = $data[1];
-      $typeName = array_search($type, $transactionTypes);
-
-      if(!$typeName) {
-        return 'discard log';
-      }
-
     } else {
       return 'discard log';
     }
@@ -83,8 +66,14 @@
       "LEFT JOIN `" . DB_PREFIX . "order_recurring` as or1 ON (or1.order_recurring_id=ort.order_recurring_id) " .
       "WHERE ort.order_recurring_id='" . $order_recurring_id . "' " .
         "AND ort.type='" . $type . "' " .
-        "AND ort.date_added>='" . $log['date_added'] . "' " .
-        "AND ort.date_added<'" . $oneMinutePastDateAdded . "' " .
+        (
+          $type == '5'
+            ? ""
+            : (
+              "AND ort.date_added>='" . $log['date_added'] . "' " .
+              "AND ort.date_added<'" . $oneMinutePastDateAdded . "' "
+            )
+        ) .
       "ORDER BY ort.date_added " . 
       "LIMIT 1 "
     )->row;
