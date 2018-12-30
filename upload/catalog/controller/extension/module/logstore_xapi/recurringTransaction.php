@@ -27,10 +27,11 @@
     ) {
       // Coming from catalog/model/extension/payment/pp_express/log
 
-      $request = $data[0]['request'];
+      // $request = $data[0]['request'];
+      parse_str($data[0]['request'], $request);
       $response = $data[0]['response'];
-  
-      if($response !== "VERIFIED" || !isset($request['post']['txn_type'])) {
+
+      if($response !== "VERIFIED" || !isset($request['txn_type'])) {
         return 'discard log';
       }
   
@@ -39,21 +40,19 @@
         'recurring_payment_suspended' => "6",
         'recurring_payment_suspended_due_to_max_failed_payment' => "7",
         'recurring_payment_failed' => "4",
-        'recurring_payment_outstanding_payment_failed' => "8",
-        'recurring_payment_outstanding_payment' => "2",
-        // 'recurring_payment_recurring_date_added' => "0",
-        'recurring_payment_recurring_cancel' => "5",
-        // 'recurring_payment_skipped' => "3",
+        'recurring_payment_profile_cancel' => "5",
+        'recurring_payment_skipped' => "3",
         'recurring_payment_expired' => "9",
       ];
 
-      if(!isset($transactionTypes[$request['post']['txn_type']])) {
+      if(!isset($transactionTypes[$request['txn_type']])) {
         return 'discard log';
       }
 
-      $order_recurring_id = $request['post']['recurring_payment_id'];
-      $typeName = $request['post']['txn_type'];
+      $order_recurring_id = $request['rp_invoice_id'];
+      $typeName = $request['txn_type'];
       $type = $transactionTypes[$typeName];
+      $amount = isset($request['payment_gross']) ? floatval($request['payment_gross']) : 0;
   
     } else if(
       count($data) === 2
@@ -183,7 +182,7 @@
     $coupon_rows = get_coupon_rows($order_row, $general);
 
     // Don't sent $coupon_rows to get_product because this is not the initial transaction.
-    $object = get_product($order_row, $order_product_row, array(), null, false, $general);
+    $object = get_product($order_row, $order_product_row, array(), null, false, $general, isset($amount) ? $amount : null);
 
     if(!$object) {
       echo "    Skipping—product not found.\n";

@@ -2,7 +2,7 @@
   require_once('get_product_options.php');
   require_once('get_ebooks.php');
 
-  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general) {
+  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general, $amount) {
 
     // get the moodle course id from the DB
     $product_moodle_mapping_row = $general['db']->query(
@@ -60,23 +60,31 @@
       }
     }
 
-    $cost = $order_product_row['price'];
+    if(isset($amount)) {
+      $cost = $price = $amount;
 
-    // Figure it out if the coupon clearly relates to this product only, else divide it
-    // between the products
-    foreach($coupon_rows as $coupon_row) {
-      if(in_array($order_product_row['product_id'], $coupon_row['product_ids'])) {
-        $cost += $coupon_row['amount'];
-
-      } else if(count($coupon_row['product_ids']) === 0) {
-        $totalPrice = $totalProductPrices ? $totalProductPrices : $order_product_row['price'];
-        $cost += $coupon_row['amount'] * ($order_product_row['price'] / $totalProductPrices);
+    } else {
+      $cost = $order_product_row['price'];
+  
+      // Figure it out if the coupon clearly relates to this product only, else divide it
+      // between the products
+      foreach($coupon_rows as $coupon_row) {
+        if(in_array($order_product_row['product_id'], $coupon_row['product_ids'])) {
+          $cost += $coupon_row['amount'];
+  
+        } else if(count($coupon_row['product_ids']) === 0) {
+          $totalPrice = $totalProductPrices ? $totalProductPrices : $order_product_row['price'];
+          $cost += $coupon_row['amount'] * ($order_product_row['price'] / $totalProductPrices);
+        }
       }
+  
+      if($isRefund) {
+        $cost *= -1;
+      }
+
+      $price = $order_product_row['price'];
     }
 
-    if($isRefund) {
-      $cost *= -1;
-    }
 
     return [
       "id" => $id,
@@ -89,7 +97,7 @@
         "extensions" => array_merge(
           get_product_options($order_row, $order_product_row, $general),
           [
-            "http://lrs.resourcingeducation.com/extension/price" => $order_product_row['price'],
+            "http://lrs.resourcingeducation.com/extension/price" => $price,
             "http://lrs.resourcingeducation.com/extension/cost" => $cost,
           ],
           (count($recurringInfo) > 0
