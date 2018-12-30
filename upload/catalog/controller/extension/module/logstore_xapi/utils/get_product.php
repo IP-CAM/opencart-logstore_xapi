@@ -2,7 +2,7 @@
   require_once('get_product_options.php');
   require_once('get_ebooks.php');
 
-  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general, $amount) {
+  function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general, $amount=null) {
 
     // get the moodle course id from the DB
     $product_moodle_mapping_row = $general['db']->query(
