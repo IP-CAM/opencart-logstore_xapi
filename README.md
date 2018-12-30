@@ -23,9 +23,9 @@ Designed for a customized version of OpenCart (based on version 2.3.0.2).
 5) Install `php-cgi` (`sudo apt-get install php5-cgi`) on the OpenCart server (needed for the cron).
 6) Set up a cron to run `sudo php-cgi -f /var/www/html/opencart2.3/upload/index.php route=extension/module/logstore_xapi` every 5 minutes.
 
-## Create xapi logs for past orders
+## Create xapi logs for past orders (and recurring transactions)
 
-Replace `comma-separated-test-customer-ids-here` and `date-and-time-of-install-here` appropriately prior to running this on the DB.
+Replace `comma-separated-test-customer-ids-here` and `date-and-time-of-install-here` appropriately prior to running these on the DB.
 
 ```sql
 INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
@@ -40,6 +40,25 @@ INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
       customer_id NOT IN ( comma-separated-test-customer-ids-here )
       AND order_status_id = 5
       AND date_added < "date-and-time-of-install-here"
+  )
+```
+
+```sql
+INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
+  (
+    SELECT
+      'extension/payment/pp_express/log',
+      CONCAT('[{"request":"txn_type=', IF(ort.type=1, 'recurring_payment', IF(ort.type=4, 'recurring_payment_failed', 'recurring_payment_profile_cancel')), '&rp_invoice_id=', ort.order_recurring_id, '&payment_gross=', ort.amount, '","response":"VERIFIED"},"IPN data"]'),
+      o.customer_id,
+      ort.date_added
+    FROM oc_order_recurring_transaction as ort
+    	LEFT JOIN oc_order_recurring as or1 ON (or1.order_recurring_id = ort.order_recurring_id)
+    	LEFT JOIN oc_order as o ON (o.order_id = or1.order_id)
+    WHERE 
+      o.customer_id NOT IN ( comma-separated-test-customer-ids-here )
+      AND o.order_status_id = 5
+      AND ort.type IN (1, 4, 5)
+      AND ort.date_added < "date-and-time-of-install-here"
   )
 ```
 
