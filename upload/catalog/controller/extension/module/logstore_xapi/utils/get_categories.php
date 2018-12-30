@@ -13,8 +13,11 @@
     $categories = array();
 
     foreach($category_rows as $category_row) {
+      
+      $categoryPage = $general['site_base'] . "index.php?route=product/category&path=" . $category_row['category_id'];
+
       $categories[] = [
-        "id" => $category_row['category_id'],
+        "id" => $categoryPage,
         "definition" => [
           "type" => "http://id.tincanapi.com/activitytype/category",
           "name" => [
