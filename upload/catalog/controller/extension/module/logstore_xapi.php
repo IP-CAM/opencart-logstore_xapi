@@ -90,10 +90,12 @@
           }
       
           echo "  Sending " . count($statements) . " statement(s)...\n";
-          print_r($statements);
-          print_r($ids_to_delete);
-die();
-          
+
+          // for testing:
+          //   print_r($statements);
+          //   print_r($ids_to_delete);
+          //   die();
+
           // send them to the store
           $url = mb_ereg_replace('(/statements|/)$', '', $endpoint) . '/statements';
           $auth = base64_encode($username.':'.$password);
@@ -123,7 +125,7 @@ die();
           echo "  Deleting log rows...\n";
       
           // delete rows that were successfully sent off
-//          $this->db->query("DELETE FROM `" . DB_PREFIX . "logstore_xapi_log` WHERE logstore_xapi_log_id IN (" . implode(",", $ids_to_delete) . ")");
+          $this->db->query("DELETE FROM `" . DB_PREFIX . "logstore_xapi_log` WHERE logstore_xapi_log_id IN (" . implode(",", $ids_to_delete) . ")");
           
           echo "  Delete successful.\n";
           echo "  Logstore xAPI batch send COMPLETE.\n";
