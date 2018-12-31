@@ -41,7 +41,7 @@
         'recurring_payment_suspended_due_to_max_failed_payment' => "7",
         'recurring_payment_failed' => "4",
         'recurring_payment_profile_cancel' => "5",
-        'recurring_payment_skipped' => "3",
+        // 'recurring_payment_skipped' => "3",
         'recurring_payment_expired' => "9",
       ];
 
@@ -140,9 +140,6 @@
       "6" => $recurringFailureVerb,
       "7" => $recurringFailureVerb,
       "4" => $recurringFailureVerb,
-      "8" => $recurringFailureVerb,
-      "2" => $recurringPurchaseVerb,
-      // "0" => "",
       "5" => $recurringCancelVerb,
       // "3" => "",
       "9" => $recurringFailureVerb,
