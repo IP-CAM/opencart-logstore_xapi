@@ -34,7 +34,7 @@ INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
       'checkout/order/addOrderHistory',
       CONCAT('[', order_id, ',"', order_status_id, '"]'),
       customer_id,
-      '2018-12-27'
+      date_added
     FROM oc_order
     WHERE 
       customer_id NOT IN ( comma-separated-test-customer-ids-here )
