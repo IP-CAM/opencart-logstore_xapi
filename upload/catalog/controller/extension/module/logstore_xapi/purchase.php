@@ -153,7 +153,7 @@
         "actor" => $actor,
         "verb" => $verb,
         "object" => $object,
-        "timestamp" => date('c', strtotime($order_row['date_added'])),
+        "timestamp" => date('c', strtotime($log['date_added'])),
         "context" => array_merge(
           get_basic_context($general),
           [
