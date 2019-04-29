@@ -65,10 +65,11 @@
         $statements = purchase(
           [
             "event_route" => $log['event_route'],
+            "date_added" => $log['date_added'],
             "data" => json_encode([
               $order_id,
               $general['ordered_order_status_ids'][0],
-            ])
+            ]),
           ],
           $general
         );
@@ -149,11 +150,13 @@
         continue;
       }
 
+      $timestampDateTime = new DateTime($log['date_added'], new DateTimeZone('UTC'));
+
       $statements[] = $newstatement = [
         "actor" => $actor,
         "verb" => $verb,
         "object" => $object,
-        "timestamp" => date('c', strtotime($log['date_added'])),
+        "timestamp" => $timestampDateTime->format('c'),
         "context" => array_merge(
           get_basic_context($general),
           [
