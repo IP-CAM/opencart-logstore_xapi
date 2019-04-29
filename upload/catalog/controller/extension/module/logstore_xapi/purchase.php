@@ -16,6 +16,7 @@
   function purchase($log, $general) {
 
     // get the order id
+    $statements = array();
     $data = json_decode($log['data'], true);
     $order_id = intval($data[0]);
     $order_status_id = intval($data[1]);
@@ -46,23 +47,70 @@
 
     $general['language_code'] = format_language($order_row['language_code']);
 
+    $isOrdered = in_array($order_status_id, $general['ordered_order_status_ids']);
+    $isCanceled = in_array($order_status_id, $general['canceled_order_status_ids']);
+    $isComplete = in_array($order_status_id, $general['completed_order_status_ids']);
     $isRefund = in_array($order_status_id, $general['refunded_order_status_ids']);
-    $verb = in_array($order_status_id, $general['successful_order_status_ids'])
-      ? [
+
+    // If it is complete, look up order history. If it was never "ordered," then first do that xAPI statement.
+    if($isComplete) {
+
+      $order_history_rows = $general['db']->query(
+        "SELECT order_id FROM `" . DB_PREFIX . "order_history` " .
+        "WHERE order_id='" . $general['db']->escape($order_id) . "' " .
+        "AND order_status_id IN (" . implode(',', $general['ordered_order_status_ids']) . ")"
+      )->rows;
+
+      if(count($order_history_rows) == 0) {
+        $statements = purchase(
+          [
+            "event_route" => $log['event_route'],
+            "data" => json_encode([
+              $order_id,
+              $general['ordered_order_status_ids'][0],
+            ])
+          ],
+          $general
+        );
+      }
+    }
+
+    $verb = false;
+
+    if($isOrdered) {
+      $verb = [
+        "id" => "http://lrs.resourcingeducation.com/verb/order",
+        "display" => [
+          $general['language_code'] => "ordered",
+        ],
+      ];
+
+    } elseif($isComplete) {
+      $verb = [
         "id" => "http://activitystrea.ms/schema/1.0/purchase",
         "display" => [
           $general['language_code'] => "purchased",
         ],
-      ]
-      : ($isRefund
-        ? [
-          "id" => "http://lrs.resourcingeducation.com/verb/refunded",
-          "display" => [
-            $general['language_code'] => "was refunded for",
-          ],
-        ]
-        : false
-      );
+      ];
+
+    } elseif($isCanceled) {
+      $verb = [
+        "id" => "http://lrs.resourcingeducation.com/verb/cancel",
+        "display" => [
+          $general['language_code'] => "canceled order for",
+        ],
+      ];
+
+    } elseif($isRefund) {
+      $verb = [
+        "id" => "http://lrs.resourcingeducation.com/verb/refunded",
+        "display" => [
+          $general['language_code'] => "was refunded for",
+        ],
+      ];
+
+    }
+
     if(!$verb) {
       echo "    Discarding order id " . $order_id . " due to order status id of " . $order_status_id . ". (Current order status id is " . $order_row['order_status_id'] . ".)\n";
       return 'discard log';
@@ -84,8 +132,6 @@
       print_r($log);
       return;
     }
-
-    $statements = array();
 
     $coupon_rows = get_coupon_rows($order_row, $general);
     
