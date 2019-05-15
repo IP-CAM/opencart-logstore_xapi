@@ -101,4 +101,4 @@ Notes:
 * in this case, there should NOT be a `Readium Book Info` attribute
 
 
-*Final note: All products with any ebooks (one or more) still need the `Readium Book ID` attribute*
+*Final note: All products connected to ebooks (one or more) still need the `Readium Book ID` attribute*
