@@ -70,7 +70,7 @@ INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
   - Readium Book Author
   - Readium Book Publisher
 
-#### 2) For each product with MORE THAN ONE ebook related to it, give the Readium Book Info attribute a value in the following format.
+#### 2) For each product WHICH IS NOT A PRODUCT IN AND OF ITSELF, give the `Readium Book Info` attribute a value in the following format.
 
 ```
 ID=35
@@ -90,8 +90,8 @@ Notes:
 
 * the ID is the reader id
 * an empty line must be between books
-* use the code editing mode </> in the attribute editor and toggle it off before saving, as is done with the “Readium Book ID” attribute
+* use the code editing mode </> in the attribute editor and toggle it off before saving, as is done with the `Readium Book ID` attribute
 
-#### 3) For each product with ONLY ONE ebook related to it, add the title, author and publisher into the other new attribute fields (Readium Book Title, etc.). Add the ISBN under the corresponding field in the Data tab on the Edit product page.
+#### 3) For each product WHICH IS ITSELF AN EBOOK, add the title, author and publisher into the other new attribute fields (`Readium Book Title`, etc.). Add the ISBN under the corresponding field in the Data tab on the Edit product page.
 
-Final note: All products with any ebooks (one or more) still need the “Readium Book ID” attribute
+Final note: All products with any ebooks (one or more) still need the `Readium Book ID` attribute
