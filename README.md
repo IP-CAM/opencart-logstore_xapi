@@ -72,7 +72,7 @@ INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
 
 ### 2) For each product connected to one or more ebooks, do ONE of the following:
 
-#### For each product WHICH IS NOT A PRODUCT IN AND OF ITSELF, give the `Readium Book Info` attribute a value in the following format.
+#### For each product WHICH IS NOT AN EBOOK IN AND OF ITSELF, give the `Readium Book Info` attribute a value in the following format.
 
 ```
 ID=35
