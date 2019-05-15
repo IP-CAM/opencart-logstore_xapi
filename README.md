@@ -64,13 +64,15 @@ INSERT INTO oc_logstore_xapi_log (event_route, data, customer_id, date_added)
 
 ## Setting up book meta data in OpenCart
 
-#### 1) Create several new Attributes in OpenCart called the following:
+### 1) Create several new Attributes in OpenCart called the following:
   - Readium Book Info
   - Readium Book Title
   - Readium Book Author
   - Readium Book Publisher
 
-#### 2) For each product WHICH IS NOT A PRODUCT IN AND OF ITSELF, give the `Readium Book Info` attribute a value in the following format.
+### 2) For each product connected to one or more ebooks, do ONE of the following:
+
+#### For each product WHICH IS NOT A PRODUCT IN AND OF ITSELF, give the `Readium Book Info` attribute a value in the following format.
 
 ```
 ID=35
@@ -92,7 +94,7 @@ Notes:
 * an empty line must be between books
 * use the code editing mode </> in the attribute editor and toggle it off before saving, as is done with the `Readium Book ID` attribute
 
-#### 3) For each product WHICH IS ITSELF AN EBOOK, add the title, author and publisher into the other new attribute fields (`Readium Book Title`, etc.). Add the ISBN under the corresponding field in the Data tab on the Edit product page.
+#### For each product WHICH IS ITSELF AN EBOOK, add the title, author and publisher into the other new attribute fields (`Readium Book Title`, etc.). Add the ISBN under the corresponding field in the Data tab on the Edit product page.
 
 Notes:
 
