@@ -94,4 +94,8 @@ Notes:
 
 #### 3) For each product WHICH IS ITSELF AN EBOOK, add the title, author and publisher into the other new attribute fields (`Readium Book Title`, etc.). Add the ISBN under the corresponding field in the Data tab on the Edit product page.
 
-Final note: All products with any ebooks (one or more) still need the `Readium Book ID` attribute
+Notes:
+
+* in this case, there should NOT be a `Readium Book Info` attribute
+
+*Final note: All products with any ebooks (one or more) still need the `Readium Book ID` attribute*
