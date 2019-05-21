@@ -4,11 +4,15 @@
 
   function get_product($order_row, $order_product_row, $coupon_rows, $totalProductPrices, $isRefund, $general, $amount=null) {
 
-    // get the moodle course id from the DB
-    $product_moodle_mapping_row = $general['db']->query(
+    // get the moodle course ids from the DB
+    $product_moodle_mapping_rows = $general['db']->query(
       "SELECT * FROM `" . DB_PREFIX . "product_moodle_mapping` " .
       "WHERE product_id='" . $general['db']->escape($order_product_row['product_id']) . "'"
-    )->row;
+    )->rows;
+    $includedCourses = [];
+    foreach($product_moodle_mapping_rows as $product_moodle_mapping_row) {
+      $includedCourses[] = mb_ereg_replace('MOODLE_ID', $product_moodle_mapping_row['moodle_course_id'], $general['moodle_url_template']);
+    }
 
     // get the ebooks included in product
     $includedEbookInfo = get_ebooks($order_product_row, $general);
@@ -18,11 +22,11 @@
     $isEbook = false;
     
     // get info based on product type
-    if($product_moodle_mapping_row) {  // it is a course
-      $id = mb_ereg_replace('MOODLE_ID', $product_moodle_mapping_row['moodle_course_id'], $general['moodle_url_template']);
+    if(count($includedCourses) === 1) {  // it is a course
+      $id = $includedCourses[0];
       $type = "http://id.tincanapi.com/activitytype/lms/course";
 
-    } else if(count($includedEbookInfo) === 1) {  // it is a book
+    } else if(count($includedCourses) === 0 && count($includedEbookInfo) === 1) {  // it is a book
       $isEbook = true;
       $id = $includedEbookInfo[0]['id'];
       $type = "http://id.tincanapi.com/activitytype/book";
@@ -106,6 +110,9 @@
             ]
             : array()
           ),
+          count($includedCourses) === 0 ? [] : [
+            "http://lrs.resourcingeducation.com/extension/included-courses" => $includedCourses,
+          ],
           count($includedEbookInfo) === 0 ? [] : [
             "http://lrs.resourcingeducation.com/extension/included-ebooks" => $includedEbookInfo,
           ],
